@@ -1,0 +1,38 @@
+
+.card{
+    border:0px solid;
+    position:relative;
+    background-size:cover;
+}
+
+.search-box {
+    position : absolute;
+    display:inline-block;
+    bottom:40%;
+    left:0;
+    right:0;
+    padding:15px;
+    text-align:center;
+}
+
+.btnspace{
+  margin-top: 150px;
+}
+.preview-info {
+  opacity: 1;
+}
+
+.card-show{
+  display:  none;
+}
+
+.image:hover + .card-show{
+  display: block;
+  color: red;
+}
+
+.wrapper{ 
+  width: 360px; 
+  padding: 20px; 
+  margin: 30px auto;
+}
