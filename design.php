@@ -120,7 +120,7 @@ if(!isset($_SESSION["designerloggedin"]) || $_SESSION["designerloggedin"] !== tr
             </div> 
             <div class="mb-3">
                 <label for="category" class="form-label fw-bold">Category Id</label>
-                <select class="form-control" id="category" name="category_id">
+                <select class="form-control" id="category" name="categoryId">
                     <option>-- Select Category --</option>
                     <?php foreach ($results as $result) {?>
                     <option><?php echo $result["categoryId"]; ?> - <?php echo $result["name"]; ?></option>

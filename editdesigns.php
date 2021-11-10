@@ -1,44 +1,27 @@
 <?php
-	/* A Simple Blogging Application
-    Title : Edit Page - For Updating and Deleting Post
-    Date: September 27th 2021
-    Group 8: Taiwo Omoleye and Jan Cyruss Naniong
-    */
-    require('db_connect.php');
+// Initialize the session
 
-    session_start();
-    require('authenticate.php');
+require('db_connect.php');
 
-    if(!isset($_SESSION["adminloggedin"]) || $_SESSION["adminloggedin"] !== true){
+session_start();
+require('authenticate.php');
+
+// Check if the user is logged in, if not then redirect him to login page
+if(!isset($_SESSION["adminloggedin"]) || $_SESSION["adminloggedin"] !== true){
     header("location: admin.php");
     exit;
-	}
-    
-    if (isset($_GET['id'])) { // Retrieve quote to be edited, if id GET parameter is in URL.
-        // Sanitize the id. 
-        $categoryId = filter_input(INPUT_GET, 'id', FILTER_SANITIZE_NUMBER_INT);
-        
-        // Build the parametrized SQL query using the filtered id.
-        $query = "SELECT * FROM categories WHERE categoryId = :categoryId";
-        $statement = $db->prepare($query);
-        $statement->bindValue(':categoryId', $categoryId, PDO::PARAM_INT);
-        
-        // Execute the SELECT and fetch the single row returned.
-        $statement->execute();
-        $categories = $statement->fetch();
-    } 
+}
 
-    function validateID(){
-		return filter_input(INPUT_GET, 'id', FILTER_VALIDATE_INT);
-	}
+    // SQL is written as a String.
+     $query = "SELECT * FROM designs ORDER BY designId";
 
-	if(validateID() == false){
-		header('Location: adminwelcome.php');
-		exit;
-	}
+     // A PDO::Statement is prepared from the query.
+     $statement = $db->prepare($query);
 
+     // Execution on the DB server is delayed until we execute().
+     $statement->execute(); 
 ?>
-
+ 
 <!DOCTYPE html>
 <html lang="en">
   <head>
@@ -74,8 +57,8 @@
                     <ul class="nav navbar-nav navbar-right">
                         <a class="nav-link" aria-current="page" href="#">Welcome, <b><?php echo htmlspecialchars($_SESSION["username"]); ?></b>.</a>
                         <a class="nav-link" aria-current="page" href="#">Edit Comments</a>
-                        <a class="nav-link active" aria-current="page" href="editcategories.php">Edit Categories</a>
-                        <a class="nav-link" aria-current="page" href="editdesigns.php">Edit Designs</a>
+                        <a class="nav-link" aria-current="page" href="editcategories.php">Edit Categories</a>
+                        <a class="nav-link active" aria-current="page" href="editdesigns.php">Edit Designs</a>
                         <a class="nav-link" aria-current="page" href="password_reset_admin.php">Reset Password</a>
                         <a class="nav-link" aria-current="page" href="logout.php">Sign Out</a>
                     </ul>
@@ -103,32 +86,22 @@
             <a class="nav-link active" aria-current="page" href="#">Bubbles</a>
             </li>
         </ul>
-        <h1>Existing Categories</h1>
+        <h1>Existing Designs</h1>
         <hr>
-		<div class="container">		
-			<form action="process_post.php" method="post">
-				<fieldset>
-					<legend>Editing <?= $categories['name'] ?></legend>
-					<div class="mb-3">
-		                <label for="title" class="form-label fw-bold">Category Name</label>
-		                <input type="name" class="form-control" id="title" name="title" value="<?= $categories['name'] ?>">
-		            </div>
-		            
-		            <div class="mb-3">
-		                <label for="text" class="form-label fw-bold">Description</label>
-		                <textarea class="form-control" id="description" name="description" rows="3"><?= $categories['description'] ?></textarea>
-		            </div>
-					<p>
-						<input type="hidden" name="categoryId" value="<?= $categories['categoryId'] ?>">
-						<input type="submit" name="updatecategory" value="Update">
-						<input type="submit" name="deletecategory" value="Delete" onclick="return confirm('Are you sure you wish to delete this post?')">
-					</p>
-				</fieldset>
-			</form>	
-		</div>
-		<div id="footer">
-			Copyright 2021 - No Rights Reserved
-		</div>
-	</div>
+        <div class="container">
+            <div class="list-group">
+                <?php while($row = $statement->fetch()): ?>
+                    <a href="edit_show_design.php?id=<?= $row['designId'] ?>" class="list-group-item list-group-item-action"><?= $row['name'] ?></a>
+                <?php endwhile ?>
+            </div>
+        </div>
+        <!-- <hr>
+        <div class="container">
+            <a href="design.php" class="btn btn-primary btn-lg active" role="button" aria-pressed="true">Add Design</a>
+        </div> -->
+        <!-- <div id="footer">
+            Copyright 2021 - No Rights Reserved
+        </div> -->
+    </main>
 </body>
 </html>

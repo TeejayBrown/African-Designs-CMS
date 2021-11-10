@@ -6,8 +6,22 @@
     */
     require('db_connect.php');
 
+    include ("fileupload.php");
+
+    $query = "SELECT categoryId, name FROM categories";
+    try{
+        $statement = $db->prepare($query);
+         // Execution on the DB server is delayed until we execute().
+         $statement->execute(); 
+         $results = $statement->fetchAll();
+    } 
+    catch(Exception $ex) {
+     echo ($ex -> getMessage());
+    }
     session_start();
-    require('authenticate.php');
+    //require('authenticate.php');
+
+
 
     if(!isset($_SESSION["adminloggedin"]) || $_SESSION["adminloggedin"] !== true){
     header("location: admin.php");
@@ -16,16 +30,17 @@
     
     if (isset($_GET['id'])) { // Retrieve quote to be edited, if id GET parameter is in URL.
         // Sanitize the id. 
-        $categoryId = filter_input(INPUT_GET, 'id', FILTER_SANITIZE_NUMBER_INT);
+        $designId = filter_input(INPUT_GET, 'id', FILTER_SANITIZE_NUMBER_INT);
         
         // Build the parametrized SQL query using the filtered id.
-        $query = "SELECT * FROM categories WHERE categoryId = :categoryId";
+        $query = "SELECT * FROM designs WHERE designId = :designId";
         $statement = $db->prepare($query);
-        $statement->bindValue(':categoryId', $categoryId, PDO::PARAM_INT);
+        $statement->bindValue(':designId', $designId, PDO::PARAM_INT);
         
         // Execute the SELECT and fetch the single row returned.
         $statement->execute();
-        $categories = $statement->fetch();
+        $designs = $statement->fetch();
+        $display = $designs['image'];
     } 
 
     function validateID(){
@@ -74,8 +89,8 @@
                     <ul class="nav navbar-nav navbar-right">
                         <a class="nav-link" aria-current="page" href="#">Welcome, <b><?php echo htmlspecialchars($_SESSION["username"]); ?></b>.</a>
                         <a class="nav-link" aria-current="page" href="#">Edit Comments</a>
-                        <a class="nav-link active" aria-current="page" href="editcategories.php">Edit Categories</a>
-                        <a class="nav-link" aria-current="page" href="editdesigns.php">Edit Designs</a>
+                        <a class="nav-link" aria-current="page" href="editcategories.php">Edit Categories</a>
+                        <a class="nav-link active" aria-current="page" href="editdesigns.php">Edit Designs</a>
                         <a class="nav-link" aria-current="page" href="password_reset_admin.php">Reset Password</a>
                         <a class="nav-link" aria-current="page" href="logout.php">Sign Out</a>
                     </ul>
@@ -103,25 +118,47 @@
             <a class="nav-link active" aria-current="page" href="#">Bubbles</a>
             </li>
         </ul>
-        <h1>Existing Categories</h1>
+        <h1>Existing Designs</h1>
         <hr>
 		<div class="container">		
 			<form action="process_post.php" method="post">
 				<fieldset>
-					<legend>Editing <?= $categories['name'] ?></legend>
+					<legend>Editing <?= $designs['name'] ?></legend>
 					<div class="mb-3">
-		                <label for="title" class="form-label fw-bold">Category Name</label>
-		                <input type="name" class="form-control" id="title" name="title" value="<?= $categories['name'] ?>">
+		                <label for="title" class="form-label fw-bold">Design Name</label>
+		                <input type="name" class="form-control" id="title" name="title" value="<?= $designs['name'] ?>">
 		            </div>
 		            
 		            <div class="mb-3">
 		                <label for="text" class="form-label fw-bold">Description</label>
-		                <textarea class="form-control" id="description" name="description" rows="3"><?= $categories['description'] ?></textarea>
+		                <textarea class="form-control" id="description" name="description" rows="3"><?= $designs['description'] ?></textarea>
 		            </div>
+                    <div class="mb-3">
+                        <label for="image" class="form-label fw-bold">Image</label>
+
+                        <div class="mb-3">
+                            <img src="<?= $designs['image'] ?>" alt= <?= $designs['name'] ?>>
+                        </div>
+                    </div> 
+                    <div class="mb-3">
+                        <div class="mb-3">
+                            <label for="category" class="form-label fw-bold">Selected Category Id</label>
+                            <input type="name" class="form-control" value="<?= $designs['categoryId'] ?>" readonly>
+                        </div>
+                        <div class="mb-3">
+                            <label for="category" class="form-label fw-bold">Category Id: Select to confirm</label>
+                            <select class="form-control" id="category" name="categoryId">
+                                <option>-- Select Category --</option>
+                                <?php foreach ($results as $result) {?>
+                                <option><?php echo $result["categoryId"]; ?> - <?php echo $result["name"]; ?></option>
+                            <?php } ?>
+                            </select>
+                        </div>
+                    </div>
 					<p>
-						<input type="hidden" name="categoryId" value="<?= $categories['categoryId'] ?>">
-						<input type="submit" name="updatecategory" value="Update">
-						<input type="submit" name="deletecategory" value="Delete" onclick="return confirm('Are you sure you wish to delete this post?')">
+						<input type="hidden" name="designId" value="<?= $designs['designId'] ?>">
+						<input type="submit" name="updatedesign" value="Update">
+						<input type="submit" name="deletedesign" value="Delete" onclick="return confirm('Are you sure you wish to delete this post?')">
 					</p>
 				</fieldset>
 			</form>	

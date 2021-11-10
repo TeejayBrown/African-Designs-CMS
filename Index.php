@@ -8,6 +8,24 @@ session_start();
 }*/
 	require('db_connect.php');
 
+ 
+  function getExtension($str){
+      $i = strrpos($str,"_");
+      if (!$i) { return ""; }
+      $I = strlen($str) - $i;
+      $ext = substr($str,$i+1,$I);
+      return $ext;
+  }
+  
+  $results = array();
+  $fileList = glob('uploads/*');
+	foreach($fileList as $filename){
+	  if(is_file($filename) && getExtension($filename) == 'medium.jpg'){ 
+	      array_push($results, $filename);
+	  }   
+	}
+	  
+
 ?> 
 
 
@@ -47,7 +65,7 @@ session_start();
 		      		<a class="nav-link" aria-current="page" href="#">Welcome, <b><?php echo htmlspecialchars($_SESSION["username"]); ?></b>.</a>
                 <a class="nav-link" aria-current="page" href="#">Edit Comments</a>
                 <a class="nav-link" aria-current="page" href="editcategories.php">Edit Categories</a>
-                <a class="nav-link" aria-current="page" href="#">Edit Designs</a>
+                <a class="nav-link" aria-current="page" href="editdesigns.php">Edit Designs</a>
                 <a class="nav-link" aria-current="page" href="password_reset_admin.php">Reset Password</a>
                 <a class="nav-link" aria-current="page" href="logout.php">Sign Out</a>
 		      	<?php } elseif(isset($_SESSION["designerloggedin"]) && $_SESSION["designerloggedin"] === true) {?>
@@ -72,95 +90,59 @@ session_start();
 		</nav>
     <main class="container">
       <ul class="nav nav-fill w-100">
-	    <li class="nav-item">
-	      <a class="nav-link" href="#">Dolores</a>
-	    </li>
-	    <li class="nav-item">
-	      <a class="nav-link active" aria-current="page" href="#">Bubbles</a>
-	    </li>
-	    <li class="nav-item">
-	      <a class="nav-link" href="#">Dolores</a>
-	    </li>
-	    <li class="nav-item">
-	      <a class="nav-link active" aria-current="page" href="#">Bubbles</a>
-	    </li>
-	    <li class="nav-item">
-	      <a class="nav-link" href="#">Dolores</a>
-	    </li>
-	    <li class="nav-item">
-	      <a class="nav-link active" aria-current="page" href="#">Bubbles</a>
-	    </li>
-	  </ul>
-	</div>
+		    <li class="nav-item">
+		      <a class="nav-link" href="#">Dolores</a>
+		    </li>
+		    <li class="nav-item">
+		      <a class="nav-link active" aria-current="page" href="#">Bubbles</a>
+		    </li>
+		    <li class="nav-item">
+		      <a class="nav-link" href="#">Dolores</a>
+		    </li>
+		    <li class="nav-item">
+		      <a class="nav-link active" aria-current="page" href="#">Bubbles</a>
+		    </li>
+		    <li class="nav-item">
+		      <a class="nav-link" href="#">Dolores</a>
+		    </li>
+		    <li class="nav-item">
+		      <a class="nav-link active" aria-current="page" href="#">Bubbles</a>
+		    </li>
+	  	</ul>
 	
-  	<div class="card" >
-        <img class="img-fluid" src="images/designs.jpg" alt="Robots in the Park">
-        <div class="search-box">
-            <div class="form-group">
-            	<form class="d-inline-flex p-3">
-			        <input class="form-control" type="search" placeholder="Search for designs" aria-label="Search">
-    				<button class="btn btn-primary" type="submit">Search</button>
-			     </form>
-			     <p>Trending:</p>
-            </div>
-        </div>
-    </div>
-
-    <hr>
-	<!-- <div class="container">
-	  <img class="img-thumbnail" src="https://pixelprowess.com/i/park_tn.png" alt="Robots in the Park">
-	</div> -->
-	<div class="row row-cols-1 row-cols-md-3">
-	  <div class="col">
-	    <div class="card">
-	    	<div class="image">
-	      	<img class="card-img-top" src="https://pixelprowess.com/i/mug-dolores.jpg" alt="Rex">
-	      </div>
-	      <div class= card-show>
-		      <div class="card-img-overlay text-black">
-				    <h1 class="card-title">Bubbles</h1>
-				    <p class="card-text lh-sm">That's Bubble Gum Robot, or "Bubbles" for short.</p>
-				    <a href="#" class="card-link btn btn-light mt-auto">more info</a>
-				  </div>
-				</div>
+	  	<div class="card" >
+	        <img class="img-fluid" src="images/designs.jpg" alt="Robots in the Park">
+	        <div class="search-box">
+	            <div class="form-group">
+	            	<form class="d-inline-flex p-3">
+				        <input class="form-control" type="search" placeholder="Search for designs" aria-label="Search">
+	    				<button class="btn btn-primary" type="submit">Search</button>
+				     </form>
+				     <p>Trending:</p>
+	            </div>
+	        </div>
 	    </div>
-	  </div>
 
-		<div class="col">
-		  <div class="card">
-		  	<div class="image">
-		    	<img class="card-img-top" src="https://pixelprowess.com/i/mug-dolores.jpg" alt="Rex">
-		    </div>
-		    <div class= card-show>
-			    <div class="card-img-overlay text-black">
-				    <h1 class="card-title">Bubbles</h1>
-				    <p class="card-text lh-sm">That's Bubble Gum Robot, or "Bubbles" for short.</p>
-				    <a href="#" class="card-link btn btn-light mt-auto">more info</a>
-				  </div>
-				</div>
-		  </div>
-		</div>
-
-		<div class="col">
-		  <div class="card">
-		  	<div class="image">
-		    	<img class="card-img-top" src="https://pixelprowess.com/i/mug-bubbles.jpg" alt="bubbles">
-		  	</div>
-		    <div class= card-show>
-			    <div class="card-img-overlay text-blue">
-				    <h1 class="card-title">Bubbles</h1>
-				    <p class="card-text lh-sm">That's Bubble Gum Robot, or "Bubbles" for short.</p>
-				    <a href="#" class="card-link btn btn-light mt-auto">more info</a>
-				  </div>
-				</div>
-		  </div>  
-		</div>
-	</div> 
+	    <hr>
+			<div class="container">
+				<div class="row">
+					<?php foreach($results  as $result): ?>
+			    <div class="col-md-4">
+			      <div class="thumbnail">
+			      	<a href="/w3images/nature.jpg" target="_blank">	      	
+						    	<img src="<?= $result ?>" alt="<?= $result ?>">				    
+						  </a>
+						</div>
+					</div>
+					<?php endforeach ?>
+				</div>	
+			</div>
     </main>
-    <script
-      src="https://cdn.jsdelivr.net/npm/bootstrap@5.0.0-beta3/dist/js/bootstrap.bundle.min.js"
-      integrity="sha384-JEW9xMcG8R+pH31jmWH6WWP0WintQrMb4s7ZOdauHnUtxwoG2vI5DkLtS3qm9Ekf"
-      crossorigin="anonymous"
-    ></script>
   </body>
+<script
+  src="https://cdn.jsdelivr.net/npm/bootstrap@5.0.0-beta3/dist/js/bootstrap.bundle.min.js"
+  integrity="sha384-JEW9xMcG8R+pH31jmWH6WWP0WintQrMb4s7ZOdauHnUtxwoG2vI5DkLtS3qm9Ekf"
+  crossorigin="anonymous"
+></script>
+</body>
 </html>

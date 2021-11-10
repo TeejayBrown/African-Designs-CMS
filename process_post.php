@@ -75,15 +75,6 @@
 
     if (isset($_POST['designupload'])  && strlen($_POST['designname']) >=1 && strlen($_POST['description']) >=1) {
 
-        function getCategoryId($str){
-            $i = strrpos($str,"-");
-            if (!$i) { return ""; }
-            $I = strlen($str) - $i;
-            $ext = substr($str,$i+1,$I);
-            return $ext;
-        }
-        
-
         function getExtension($str){
             $i = strrpos($str,".");
             if (!$i) { return ""; }
@@ -100,6 +91,11 @@
             return $ext;
         }
 
+        function getCategoryId($str){
+            $ext = substr($str,0,1);
+            return $ext;
+        }
+
         function version_name($str, $name){
             if ($name == 'medium'){
                 $mid1 = '_'. $name.'.';
@@ -113,14 +109,15 @@
             return $result;
         }
 
-        function file_upload_path($original_filename, $upload_subfolder_name = 'uploads') {
-           $current_folder = dirname(__FILE__);
+        function file_upload_path($original_filename, $upload_subfolder_name = 'uploads/') {
+           //$current_folder = basename(__DIR__);
            
            // Build an array of paths segment names to be joins using OS specific slashes.
-           $path_segments = [$current_folder, $upload_subfolder_name, basename($original_filename)];
-           
+           /*$path_segments = [$current_folder, $upload_subfolder_name, basename($original_filename)];*/
+           $path_segments = $upload_subfolder_name . $original_filename;
            // The DIRECTORY_SEPARATOR constant is OS specific.
-           return join(DIRECTORY_SEPARATOR, $path_segments);
+           //return join(DIRECTORY_SEPARATOR, $path_segments);
+           return  $path_segments;
         }
 
         function file_is_an_image($temporary_path, $new_path) {
@@ -165,24 +162,20 @@
                 }
     
                 if (file_is_an_image($temporary_image_path, $new_image_path)) {
-
+                    $value = getCategoryId($_POST['categoryId']);
                     move_uploaded_file($temporary_image_path, $new_image_path);
                     $name= filter_input(INPUT_POST, 'designname', FILTER_SANITIZE_FULL_SPECIAL_CHARS);
                     $description = filter_input(INPUT_POST, 'description', FILTER_SANITIZE_FULL_SPECIAL_CHARS);
-                    $categoryId = filter_input(INPUT_POST, 'category', FILTER_SANITIZE_NUMBER_INT);
-                    $designerId = filter_input(INPUT_POST, 'designerId', FILTER_SANITIZE_NUMBER_INT);
+                    $categoryId = filter_input(INPUT_POST, 'categoryId', FILTER_SANITIZE_NUMBER_INT);
+                    $designerId = filter_input(INPUT_POST, 'designer', FILTER_SANITIZE_NUMBER_INT);
 
                     $query = "INSERT INTO designs (name, description, image, categoryId, designerId) VALUES (:name, :description, :image,:categoryId, :designerId)";
                     $statement = $db->prepare($query); //Catch the statement and wait for values
-                    /*$image_filename        = $_FILES['image']['name'] ; 
-                    $temporary_image_path  = $_FILES['image']['tmp_name'] ; 
-                    $new_image_path        = file_upload_path($image_filename);
-                    move_uploaded_file($temporary_image_path, $new_image_path);*/
 
                     //  Bind values to the parameters
                     $statement->bindvalue(':name', $name);
                     $statement->bindvalue(':description', $description);
-                    $statement->bindvalue(':image', $image_filename );  
+                    $statement->bindvalue(':image', $new_image_path );  
                     $statement->bindvalue(':categoryId', $categoryId);
                     $statement->bindvalue(':designerId', $designerId);   
                     
@@ -209,50 +202,52 @@
             
         
              
-    } /*else {
-        $error_message = "An error occured while processing your post."; 
-        $error_detail = "Both the title and content must at least one character.";
-    }*/
-
-
-    /*if (isset($_POST['update']) && strlen($_POST['title']) >=1 && strlen($_POST['content']) >=1 && isset($_POST['id'])) {
-        // Sanitize user input to escape HTML entities and filter out dangerous characters.
-        $title = filter_input(INPUT_POST, 'title', FILTER_SANITIZE_FULL_SPECIAL_CHARS);
-        $content = filter_input(INPUT_POST, 'content', FILTER_SANITIZE_FULL_SPECIAL_CHARS);
-        $id      = filter_input(INPUT_POST, 'id', FILTER_SANITIZE_NUMBER_INT);
-        
-        // Build the parameterized SQL query and bind to the above sanitized values.
-        $query     = "UPDATE blogs SET title= :title, content = :content WHERE id = :id";
-        $statement = $db->prepare($query);
-        $statement->bindValue(':title', $title);        
-        $statement->bindValue(':content', $content);
-        $statement->bindValue(':id', $id, PDO::PARAM_INT);
-        
-        // Execute the INSERT.
-        $statement->execute();
-        
-        // Redirect after update.
-        header("Location: index.php?id={$id}");
-        exit;
     } else {
         $error_message = "An error occured while processing your post."; 
         $error_detail = "Both the title and content must at least one character.";
-    } 
+    }
 
-    if (isset($_POST["delete"]) && isset($_POST['id'])) {
-        $id = filter_input(INPUT_POST, 'id', FILTER_SANITIZE_NUMBER_INT);
+    if (isset($_POST['updatedesign']) && strlen($_POST['title']) >=1 && strlen($_POST['description']) >=1 && isset($_POST['designId'])) {
+        // Sanitize user input to escape HTML entities and filter out dangerous characters.
+        $name = filter_input(INPUT_POST, 'title', FILTER_SANITIZE_FULL_SPECIAL_CHARS);
+        $description = filter_input(INPUT_POST, 'description', FILTER_SANITIZE_FULL_SPECIAL_CHARS);
+        $designId  = filter_input(INPUT_POST, 'designId', FILTER_SANITIZE_NUMBER_INT);
+        $categoryId = filter_input(INPUT_POST, 'categoryId', FILTER_SANITIZE_NUMBER_INT);
+        
         // Build the parameterized SQL query and bind to the above sanitized values.
-        $query = "DELETE FROM blogs WHERE id=$id LIMIT 1";
-        ECHO $id;
+        $query     = "UPDATE designs SET name= :name, description = :description, categoryId = :categoryId WHERE designId = :designId";
+        $statement = $db->prepare($query);
+        $statement->bindValue(':name', $name);        
+        $statement->bindValue(':description', $description);
+        $statement->bindValue(':categoryId', $categoryId);
+        $statement->bindValue(':designId', $designId, PDO::PARAM_INT);
+        
+        
+        // Execute the INSERT.
+        $statement->execute();
+        
+        // Redirect after update.
+        header("Location: editdesigns.php?id={$id}");
+        exit;
+    } else {
+        $error_message = "An error occured while processing your post."; 
+        $error_detail = "Both the name and description must at least one character.";
+    }
+
+    if (isset($_POST["deletedesign"]) && isset($_POST['designId'])) {
+        $designId = filter_input(INPUT_POST, 'designId', FILTER_SANITIZE_NUMBER_INT);
+        // Build the parameterized SQL query and bind to the above sanitized values.
+        $query = "DELETE FROM designs WHERE designId=$designId LIMIT 1";
+        //ECHO $categoryId;
         $statement = $db->prepare($query);
 
         // Execute the INSERT.
         $statement->execute();
         
         // Redirect after update.
-        header("Location: index.php");
+        header("Location: editdesigns.php");
         exit;
-    } */
+    } 
        
 ?>
 
@@ -260,7 +255,7 @@
 <html lang="en">
 <head>
     <meta charset="utf-8">
-    <title>Winnipeg Nature Facts</title>
+    <title>African Fabrics CMS</title>
     <link rel="stylesheet" type="text/css" href="styles.css" />
 </head>
 <body>
@@ -270,7 +265,7 @@
         </div>
         <h1><?= $error_message ?></h1>
         <p><?= $error_detail ?></p>
-        <a href="index.php">Return Home</a>
+        <a href="adminwelcome.php">Return Home</a>
         <div id="footer">
             Copyright 2021 - No Rights Reserved
         </div>

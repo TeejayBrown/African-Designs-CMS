@@ -1,6 +1,6 @@
 <?php
 // Initialize the session
-session_start();
+//session_start();
  
 // Check if the user is already logged in, if yes then redirect him to welcome page
 if(isset($_SESSION["designerloggedin"]) && $_SESSION["designerloggedin"] === true){
@@ -35,7 +35,7 @@ if($_SERVER["REQUEST_METHOD"] == "POST"){
     // Validate credentials
     if(empty($username_err) && empty($password_err)){
         // Prepare a select statement
-        $query = "SELECT designerId, username, password FROM designers WHERE username = :username";
+        $query = "SELECT designerid, username, password FROM designers WHERE username = :username";
         
         if($statement = $db->prepare($query)){
             // Bind variables to the prepared statement as parameters
@@ -49,7 +49,7 @@ if($_SERVER["REQUEST_METHOD"] == "POST"){
                 // Check if username exists, if yes then verify password
                 if($statement->rowCount() == 1){
                     if($row = $statement->fetch()){
-                        $id = $row["designerId"];
+                        $id = $row["designerid"];
                         $username = $row["username"];
                         $hashed_password = $row["password"];
                         if(password_verify($password, $hashed_password)){

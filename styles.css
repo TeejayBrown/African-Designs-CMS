@@ -36,3 +36,13 @@
   padding: 20px; 
   margin: 30px auto;
 }
+
+#gallery {
+  display: grid;
+
+  /* Auto fill the columns based on how many will fit. */
+  grid-template-columns: repeat(auto-fill, 300px); 
+  
+  grid-gap: 10px;
+  margin-bottom: 2em;
+}
