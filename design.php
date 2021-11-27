@@ -53,6 +53,7 @@ if(!isset($_SESSION["designerloggedin"]) || $_SESSION["designerloggedin"] !== tr
     />
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.4.1/font/bootstrap-icons.css" />
     <link rel="stylesheet" type="text/css" href="styles.css" />
+    <script type="text/javascript" src="ckeditor/ckeditor.js"></script>
     <title>African Design</title>
   </head>
 <body>
@@ -112,7 +113,7 @@ if(!isset($_SESSION["designerloggedin"]) || $_SESSION["designerloggedin"] !== tr
             </div>
             <div class="mb-3">
                 <label for="text" class="form-label fw-bold">Description</label>
-                <textarea class="form-control" id="description" name="description" rows="3"></textarea>
+                <textarea class="ckeditor" CKEDITOR.config.autoParagraph = false; id="description" name="description" rows="3"></textarea>
             </div>
            <div class="mb-3">
                 <label for="image" class="form-label fw-bold">Image</label>
@@ -132,7 +133,7 @@ if(!isset($_SESSION["designerloggedin"]) || $_SESSION["designerloggedin"] !== tr
                 <input id="designer" class="form-control" name="designer" value="<?= $_SESSION["designerId"] ?>" readonly>
             </div> 
             <hr>
-            <button type="submit" name= "designupload" class="btn btn-secondary">submit</button>
+            <button type="submit" name= "designupload" class="btn btn-primary">Submit</button>
         </form>
         <!-- Display response messages -->
         <?php if(!empty($resMessage)) {?>

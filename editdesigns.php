@@ -38,34 +38,34 @@ if(!isset($_SESSION["adminloggedin"]) || $_SESSION["adminloggedin"] !== true){
     <title>African Design</title>
   </head>
 <body>
-    <main class="container">
-        <nav class="navbar navbar-expand-lg navbar-light bg-light">
-            <div class="container">
-                <a class="navbar-brand" href="index.php">African Designs</a>
-                <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarText" aria-controls="navbarText" aria-expanded="false" aria-label="Toggle navigation">
-                <span class="navbar-toggler-icon"></span>
-                </button>
-                <div class="collapse navbar-collapse" id="navbarSupportedContent">
-                    <ul class="navbar-nav me-auto mb-2 mb-lg-0">
-                        <li class="nav-item">
-                            <a class="nav-link" aria-current="page" href="index.php">Home</a>
-                        </li>
-                        <li class="nav-item">
-                            <a class="nav-link" aria-current="page" href="comments.php">Link</a>
-                        </li>
-                    </ul>
-                    <ul class="nav navbar-nav navbar-right">
-                        <a class="nav-link" aria-current="page" href="#">Welcome, <b><?php echo htmlspecialchars($_SESSION["username"]); ?></b>.</a>
-                        <a class="nav-link" aria-current="page" href="#">Edit Comments</a>
-                        <a class="nav-link" aria-current="page" href="editcategories.php">Edit Categories</a>
-                        <a class="nav-link active" aria-current="page" href="editdesigns.php">Edit Designs</a>
-                        <a class="nav-link" aria-current="page" href="password_reset_admin.php">Reset Password</a>
-                        <a class="nav-link" aria-current="page" href="logout.php">Sign Out</a>
-                    </ul>
-                </div>
-          </div>
-        </nav>
-    
+    <nav class="navbar navbar-expand-lg navbar-light bg-light">
+          <div class="container-fluid">
+            <a class="navbar-brand" href="index.php">African Designs</a>
+            <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarSupportedContent" aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
+              <span class="navbar-toggler-icon"></span>
+            </button>
+            <div class="collapse navbar-collapse" id="navbarSupportedContent">
+                <ul class="navbar-nav me-auto mb-2 mb-lg-0">
+                    <li class="nav-item">
+                        <a class="nav-link active" aria-current="page" href="index.php">Home</a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link" aria-current="page" href="#">Explore</a>
+                    </li>
+                </ul>
+                <ul class="nav navbar-nav navbar-right">
+                    <a class="nav-link" aria-current="page" href="#">Welcome, <b><?php echo htmlspecialchars($_SESSION["username"]); ?></b>.</a>
+                    <a class="nav-link active" aria-current="page" href="editcomments.php">Comments</a>
+                    <!-- <a class="nav-link" aria-current="page" href="design_category.php">Design-Category</a> -->
+                    <a class="nav-link" aria-current="page" href="editcategories.php">Categories</a>
+                    <a class="nav-link" aria-current="page" href="editdesigns.php">Designs</a>
+                    <a class="nav-link" aria-current="page" href="password_reset_admin.php">Reset Password</a>
+                    <a class="nav-link" aria-current="page" href="logout.php">Sign Out</a>
+                </ul>
+            </div>
+      </div>
+    </nav>
+    <main class="container"> 
         <ul class="nav nav-fill w-100">
             <li class="nav-item">
                 <a class="nav-link" href="#">Dolores</a>
@@ -88,11 +88,25 @@ if(!isset($_SESSION["adminloggedin"]) || $_SESSION["adminloggedin"] !== true){
         </ul>
         <h1>Existing Designs</h1>
         <hr>
-        <div class="container">
-            <div class="list-group">
-                <?php while($row = $statement->fetch()): ?>
-                    <a href="edit_show_design.php?id=<?= $row['designId'] ?>" class="list-group-item list-group-item-action"><?= $row['name'] ?></a>
-                <?php endwhile ?>
+        <div class="container">        
+            <div class="mb-3">
+                <label for="design" class="form-label fw-bold">Design Name</label>
+                <select class="form-control" id="design" name="design">
+                    <option value='' selected="" disabled="">-- Select Design --</option>
+                    <?php
+                        require('db_connect.php');
+                        //require "config.php";// connection to database 
+                        $sql="select * from designs "; // Query to collect data 
+
+                        foreach ($db->query($sql) as $row) {
+                        echo "<option value=$row[designId]>$row[name]</option>";
+                        }
+                    ?>
+                </select>
+            </div>
+            <div class="mb-3" id="details">
+                <h2 id= "title"></h2>
+                <p id="description" name="description"></p>
             </div>
         </div>
         <!-- <hr>
@@ -102,6 +116,21 @@ if(!isset($_SESSION["adminloggedin"]) || $_SESSION["adminloggedin"] !== true){
         <!-- <div id="footer">
             Copyright 2021 - No Rights Reserved
         </div> -->
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
+    <script>
+        $(document).ready(function(){
+            $('#design').change(function(){
+                var designId= $('#design').val();
+                $('#details').empty();
+                $.get('retrieve_design_details.php', {'designId':designId},function(returnData){
+                    $.each(returnData.data, function(key,value){
+                        $('#details').append("<h2>"+value.name+" - "+"<a href=edit_show_design.php?id=" +value.designId+ ">" + "edit" + "</h2>");
+                        $('#details').append("<p>"+ value.description+"</p>");
+                    });
+                }, 'json');
+            });
+        });
+    </script>
     </main>
 </body>
 </html>

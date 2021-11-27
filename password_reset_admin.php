@@ -21,8 +21,8 @@ if($_SERVER["REQUEST_METHOD"] == "POST"){
     // Validate new password
     if(empty(trim($_POST["new_password"]))){
         $new_password_err = "Please enter the new password.";     
-    } elseif(strlen(trim($_POST["new_password"])) < 8){
-        $new_password_err = "Password must have atleast 8 characters.";
+    } elseif(strlen(trim($_POST["new_password"])) < 4){
+        $new_password_err = "Password must have atleast 4 characters.";
     } else{
         $new_password = trim($_POST["new_password"]);
     }
@@ -55,7 +55,7 @@ if($_SERVER["REQUEST_METHOD"] == "POST"){
             if($statement->execute()){
                 // Password updated successfully. Destroy the session, and redirect to login page
                 session_destroy();
-                header("location: adminlogin.php");
+                header("location: admin.php");
                 exit();
             } else{
                 echo "Oops! Something went wrong. Please try again later.";
@@ -99,14 +99,15 @@ if($_SERVER["REQUEST_METHOD"] == "POST"){
                         <a class="nav-link" aria-current="page" href="index.php">Home</a>
                     </li>
                     <li class="nav-item">
-                        <a class="nav-link" aria-current="page" href="comments.php">Link</a>
+                        <a class="nav-link" aria-current="page" href="comments.php">Explore</a>
                     </li>
                 </ul>
                 <ul class="nav navbar-nav navbar-right">
                     <a class="nav-link" aria-current="page" href="#">Welcome, <b><?php echo htmlspecialchars($_SESSION["username"]); ?></b>.</a>
-                    <a class="nav-link" aria-current="page" href="#">Edit Comments</a>
-                    <a class="nav-link" aria-current="page" href="editcategories.php">Edit Categories</a>
-                    <a class="nav-link" aria-current="page" href="#">Edit Designs</a>
+                    <a class="nav-link" aria-current="page" href="editcomments.php">Comments</a>
+                    <!-- <a class="nav-link" aria-current="page" href="design_category.php">Design-Category</a> -->
+                    <a class="nav-link" aria-current="page" href="editcategories.php">Categories</a>
+                    <a class="nav-link" aria-current="page" href="editdesigns.php">Designs</a>
                     <a class="nav-link active" aria-current="page" href="password_reset_admin.php">Reset Password</a>
                     <a class="nav-link" aria-current="page" href="logout.php">Sign Out</a>
                 </ul>

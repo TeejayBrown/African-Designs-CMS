@@ -46,3 +46,27 @@
   grid-gap: 10px;
   margin-bottom: 2em;
 }
+
+.comment-name { font-weight: bold; }
+.comment-date {
+  font-style: italic;
+  font-size: 0.8em;
+}
+
+.comment_post p {
+    margin-top: 0;
+}
+
+.comment_post h2 a{
+    text-decoration: none;
+    color: black;
+}
+.tab { 
+       display:inline-block; 
+       margin-left: 40px; 
+}
+
+.reply_form {
+  margin-left: 40px;
+  display: none;
+}

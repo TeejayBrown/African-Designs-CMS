@@ -4,6 +4,7 @@
     Date: November 7, 2021
     Name: Taiwo Omoleye 
     */
+    
     include '\xampp\htdocs\wd2\Project\php-image-resize-master\lib\ImageResize.php';
     include '\xampp\htdocs\wd2\Project\php-image-resize-master\lib\ImageResizeException.php';
     use \Gumlet\ImageResize;

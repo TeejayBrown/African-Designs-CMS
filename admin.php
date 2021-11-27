@@ -4,7 +4,7 @@
  
 // Check if the admin is already logged in, if yes then redirect him to welcome page
 if(isset($_SESSION["adminloggedin"]) && $_SESSION["adminloggedin"] === true){
-    header("location: adminwelcome.php");
+    header("location: password_reset_admin.php");
     exit;
 }
  
@@ -32,6 +32,9 @@ if ($_SERVER["REQUEST_METHOD"]== "POST") {
           
         if(($user['username'] == $username) && 
             ($user['password'] == $password)) {
+            $id = $user['adminId'];
+            //$email = $user['adminId'];
+
              session_start();
                             
                 // Store data in session variables
@@ -41,7 +44,7 @@ if ($_SERVER["REQUEST_METHOD"]== "POST") {
                 
                 // Redirect user to welcome page
                 //header("location: welcome.php");
-                header("location: adminwelcome.php");
+                header("location: index.php");
             }
         else {
             header("location: index.php");

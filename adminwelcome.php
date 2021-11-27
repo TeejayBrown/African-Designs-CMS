@@ -49,9 +49,10 @@ if(!isset($_SESSION["adminloggedin"]) || $_SESSION["adminloggedin"] !== true){
                     </ul>
                     <ul class="nav navbar-nav navbar-right">
                         <a class="nav-link" aria-current="page" href="#">Welcome, <b><?php echo htmlspecialchars($_SESSION["username"]); ?></b>.</a>
-                        <a class="nav-link" aria-current="page" href="#">Edit Comments</a>
-                        <a class="nav-link" aria-current="page" href="editcategories.php">Edit Categories</a>
-                        <a class="nav-link" aria-current="page" href="editdesigns.php">Edit Designs</a>
+                        <a class="nav-link" aria-current="page" href="#">Comments</a>
+                        <a class="nav-link" aria-current="page" href="design_category.php">Design-Category</a>
+                        <a class="nav-link active" aria-current="page" href="editcategories.php">Categories</a>
+                        <a class="nav-link" aria-current="page" href="#">Designs</a>
                         <a class="nav-link" aria-current="page" href="password_reset_admin.php">Reset Password</a>
                         <a class="nav-link" aria-current="page" href="logout.php">Sign Out</a>
                     </ul>

@@ -52,6 +52,7 @@
     />
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.4.1/font/bootstrap-icons.css" />
     <link rel="stylesheet" type="text/css" href="styles.css" />
+    <script type="text/javascript" src="ckeditor/ckeditor.js"></script>
     <title>African Design</title>
   </head>
 <body>
@@ -73,9 +74,9 @@
                     </ul>
                     <ul class="nav navbar-nav navbar-right">
                         <a class="nav-link" aria-current="page" href="#">Welcome, <b><?php echo htmlspecialchars($_SESSION["username"]); ?></b>.</a>
-                        <a class="nav-link" aria-current="page" href="#">Edit Comments</a>
-                        <a class="nav-link active" aria-current="page" href="editcategories.php">Edit Categories</a>
-                        <a class="nav-link" aria-current="page" href="editdesigns.php">Edit Designs</a>
+                        <a class="nav-link" aria-current="page" href="editcomments.php">Comments</a>
+                        <a class="nav-link active" aria-current="page" href="editcategories.php">Categories</a>
+                        <a class="nav-link" aria-current="page" href="editdesigns.php">Designs</a>
                         <a class="nav-link" aria-current="page" href="password_reset_admin.php">Reset Password</a>
                         <a class="nav-link" aria-current="page" href="logout.php">Sign Out</a>
                     </ul>
@@ -116,7 +117,7 @@
 		            
 		            <div class="mb-3">
 		                <label for="text" class="form-label fw-bold">Description</label>
-		                <textarea class="form-control" id="description" name="description" rows="3"><?= $categories['description'] ?></textarea>
+		                <textarea class="ckeditor" id="description" name="description" rows="3"><?= $categories['description'] ?></textarea>
 		            </div>
 					<p>
 						<input type="hidden" name="categoryId" value="<?= $categories['categoryId'] ?>">
