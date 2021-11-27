@@ -4,6 +4,8 @@ session_start();
 require('db_connect.php');
 include ('image_display.php');
 
+$status = 0;
+
 $query = "SELECT * FROM designs ORDER BY RAND() LIMIT 15";
 try{
     $statement = $db->prepare($query);
@@ -13,6 +15,24 @@ try{
 } 
 catch(Exception $ex) {
  echo ($ex -> getMessage());
+}
+
+if($_SERVER["REQUEST_METHOD"] == "POST"){
+  if (isset($_POST['search']) && strlen($_POST['searchtext']) >=1) {
+      //  Sanitize user input to escape HTML entities and filter out dangerous characters.
+      $searchtext = filter_input(INPUT_POST, 'searchtext', FILTER_SANITIZE_FULL_SPECIAL_CHARS);
+      
+      //  Build the parameterized SQL query and bind to the above sanitized values.
+      $query = "SELECT * FROM designs WHERE name OR description LIKE '%$searchtext%'";
+      $statement = $db->prepare($query); //Catch the statement and wait for values
+      $statement->execute();
+      $results = $statement->fetchAll();
+
+      $status = 1;     
+  }else {
+      $error_message = "An error occured while processing your post."; 
+      $error_detail = "The saerch content must have at least one character.";
+  }
 }
 
 ?> 
@@ -100,31 +120,48 @@ catch(Exception $ex) {
 	        <img class="img-fluid" src="images/designs.jpg" alt="Robots in the Park">
 	        <div class="search-box">
 	            <div class="form-group">
-	            	<form class="d-inline-flex p-3">
-				        <input class="form-control" type="search" placeholder="Search for designs" aria-label="Search">
-	    				<button class="btn btn-primary" type="submit">Search</button>
-				     </form>
-				     <p>Trending:</p>
+	            	<form class="d-inline-flex p-3" action="<?php echo htmlspecialchars($_SERVER["PHP_SELF"]); ?>" method="post">
+				        <input class="form-control" type="search" name= "searchtext" placeholder="Search for designs" aria-label="Search">
+		    				<button class="btn btn-primary" type="submit" name= "search">Search</button>
+					     </form>
+					     <p>Trending:</p>
 	            </div>
 	        </div>
 	    </div>
 
 	    <hr>
 			<div class="container">
-				<div class="row">
-					<?php foreach($results  as $result): ?>
-			    <div class="col-md-4">
-			      <div class="thumbnail">
-			      	<a href="single_design.php?id=<?php echo $result['designId']; ?>">	      	
-						   <img src="<?php  echo version_name(getImageFolder($result['image']), 'medium'); ?>" alt= "<?php echo $result['name']; ?> ">	
-
-						  </a>
+				<?php if ($status == 0) { ?>
+					<div class="row">
+						<?php foreach($results  as $result): ?>
+				    <div class="col-md-4">
+				      <div class="thumbnail">
+				      	<a href="single_design.php?id=<?php echo $result['designId']; ?>">	      	
+							   <img src="<?php  echo version_name(getImageFolder($result['image']), 'medium'); ?>" alt= "<?php echo $result['name']; ?> ">	
+							  </a>
+							</div>
 						</div>
+						<?php endforeach ?>
 					</div>
-					<?php endforeach ?>
-				</div>	
-			</div>
-			
+				<?php } elseif ($status == 1) { ?>
+					<div class="row">
+						<?php if (count($results) > 0) { ?>
+							<p><?php echo count($results) ?> design(s) found.</p>
+							<?php foreach($results  as $result): ?>
+					    <div class="col-md-4">
+					      <div class="thumbnail">
+					      	<a href="single_design.php?id=<?php echo $result['designId']; ?>">	      	
+								   <img src="<?php  echo version_name(getImageFolder($result['image']), 'medium'); ?>" alt= "<?php echo $result['name']; ?> ">	
+								  </a>
+								</div>
+							</div>
+							<?php endforeach ?>
+						<?php } else { ?>
+							<p> Sorry, No result found! Try another search using different key word.</p>
+						<?php } ?>
+					</div>
+				<?php } ?>	
+			</div>	
     </main>
   </body>
 <script
