@@ -9,6 +9,24 @@
 
     require('db_connect.php');
     //$content = 
+    if (isset($_POST['search']) && strlen($_POST['searchtext']) >=1) {
+        //  Sanitize user input to escape HTML entities and filter out dangerous characters.
+        $searchtext = filter_input(INPUT_POST, 'searchtext', FILTER_SANITIZE_FULL_SPECIAL_CHARS);
+        
+        //  Build the parameterized SQL query and bind to the above sanitized values.
+        $query = "SELECT * FROM designs WHERE name OR description LIKE '%$searchtext%'";
+        $statement = $db->prepare($query); //Catch the statement and wait for values
+        $statement->execute();
+        $results = $statement->fetchAll();
+
+        // Redirect after submit.
+        header("Location: editcategories.php");
+        exit;     
+    } else {
+        $error_message = "An error occured while processing your post."; 
+        $error_detail = "The saerch content must have at least one character.";
+    }
+
     if (isset($_POST['category']) && strlen($_POST['title']) >=1 && strlen($_POST['description']) >=1) {
         //  Sanitize user input to escape HTML entities and filter out dangerous characters.
         $description = strip_tags($_POST['description']);

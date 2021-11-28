@@ -21,17 +21,14 @@ if($_SERVER["REQUEST_METHOD"] == "POST"){
   if (isset($_POST['search']) && strlen($_POST['searchtext']) >=1) {
       //  Sanitize user input to escape HTML entities and filter out dangerous characters.
       $searchtext = filter_input(INPUT_POST, 'searchtext', FILTER_SANITIZE_FULL_SPECIAL_CHARS);
-      
-      //  Build the parameterized SQL query and bind to the above sanitized values.
-      $query = "SELECT * FROM designs WHERE name OR description LIKE '%$searchtext%'";
+      $categoryId = filter_input(INPUT_POST, 'category', FILTER_SANITIZE_NUMBER_INT);
+
+      $query = "SELECT * FROM designs WHERE name OR description LIKE '%$searchtext%' AND categoryId = '$categoryId'";
       $statement = $db->prepare($query); //Catch the statement and wait for values
       $statement->execute();
       $results = $statement->fetchAll();
 
-      $status = 1;     
-  }else {
-      $error_message = "An error occured while processing your post."; 
-      $error_detail = "The saerch content must have at least one character.";
+      $status = 1;
   }
 }
 
@@ -121,8 +118,18 @@ if($_SERVER["REQUEST_METHOD"] == "POST"){
 	        <div class="search-box">
 	            <div class="form-group">
 	            	<form class="d-inline-flex p-3" action="<?php echo htmlspecialchars($_SERVER["PHP_SELF"]); ?>" method="post">
-				        <input class="form-control" type="search" name= "searchtext" placeholder="Search for designs" aria-label="Search">
-		    				<button class="btn btn-primary" type="submit" name= "search">Search</button>
+					        <input class="form-control" type="search" name= "searchtext" placeholder="Search for designs" aria-label="Search">
+			    				<select class="form-control" id="category" name="category">
+		                <option value='' selected="" disabled="">-- Select Category --</option>
+		                <?php
+		                    require('db_connect.php');
+		                    $sql="select * from categories ";  
+		                    foreach ($db->query($sql) as $row) {
+		                    echo "<option value=$row[categoryId]>$row[name]</option>";
+		                    }
+		                ?>
+			            </select>
+			            <button class="btn btn-primary" type="submit" name= "search">Search</button>
 					     </form>
 					     <p>Trending:</p>
 	            </div>
