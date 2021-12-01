@@ -1,6 +1,6 @@
 <?php
 
-$limitpages = 6;
+/*$limitpages = 6;
 $page_counter = 0;
 $next = $page_counter + 1;
 $previous = $page_counter - 1;
@@ -19,7 +19,7 @@ if($_SERVER["REQUEST_METHOD"] == "POST"){
 	    $searchQuery = $searchtext;
 			$categodySearched = $categoryId;
 	 }
-}
+}*/
  //echo $searchQuery;
  //echo $categodySearched;
 //Pagination Starts
@@ -123,10 +123,11 @@ if($_SERVER["REQUEST_METHOD"] == "POST"){
   if (isset($_POST['search']) && strlen($_POST['searchtext']) >=1) {
       //  Sanitize user input to escape HTML entities and filter out dangerous characters.
       $searchtext = filter_input(INPUT_POST, 'searchtext', FILTER_SANITIZE_FULL_SPECIAL_CHARS);
+      $searchtext = strtolower($searchtext); 
       $categoryId = filter_input(INPUT_POST, 'category', FILTER_SANITIZE_NUMBER_INT);
       
 
-			$query = "SELECT * FROM designs WHERE name OR description LIKE '%$searchtext%' AND categoryId = '$categoryId'";
+			$query = "SELECT * FROM designs WHERE (LOWER(name) LIKE '%$searchtext%' OR LOWER(description) LIKE '%$searchtext%') AND categoryId = '$categoryId'";
       $statement = $db->prepare($query); //Catch the statement and wait for values
       $statement->execute();
       $results = $statement->fetchAll();

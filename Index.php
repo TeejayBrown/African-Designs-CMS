@@ -145,7 +145,7 @@ include ('search.php');
 							<?php foreach($results  as $result): ?>
 					    <div class="col-md-4">
 					      <div class="thumbnail">
-					      	<a href="single_design.php?id=<?php echo $result['designId']; ?>&p=<?php echo $result['slug'];?>">	      	
+					      	<a href="single_design.php?id=<?php echo $result['designId']; ?>&design_name=<?php echo $result['slug'];?>">	      	
 								   <img src="<?php  echo version_name(getImageFolder($result['image']), 'medium'); ?>" alt= "<?php echo $result['name']; ?> ">	
 								  </a>
 								</div>
