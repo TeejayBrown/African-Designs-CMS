@@ -49,10 +49,11 @@ if (isset($_POST['submit_comment']) && strlen($_POST['comment_text']) >=1 && ($_
     //  Sanitize user input to escape HTML entities and filter out dangerous characters.
       //$description = strip_tags($_POST['comment_text']);
       //$description = filter_var($description, FILTER_SANITIZE_FULL_SPECIAL_CHARS);
-
+    
     $description = filter_input(INPUT_POST, 'comment_text', FILTER_SANITIZE_FULL_SPECIAL_CHARS);
     $username = filter_input(INPUT_POST, 'username', FILTER_SANITIZE_FULL_SPECIAL_CHARS);
     $designId = filter_input(INPUT_POST, 'designId', FILTER_SANITIZE_NUMBER_INT);
+    $slug = $_SESSION["designName"];
     
     //  Build the parameterized SQL query and bind to the above sanitized values.
     $query = "INSERT INTO comments (description, username, designId) VALUES (:description, :username, :designId)";
@@ -87,7 +88,7 @@ if (isset($_POST['submit_comment']) && strlen($_POST['comment_text']) >=1 && ($_
     echo json_encode($comment_info);*/
 
     // Redirect after submit.
-    header("Location: single_design.php?id='$designId'");
+    header("Location: single_design.php?id=$designId&p=$slug");
     exit;     
 } else {
     $error_message = "An error occured while processing your post."; 

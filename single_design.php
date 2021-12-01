@@ -19,21 +19,25 @@ $stmt=$db->prepare($comments_query); //WHERE categoryId = '$categoryId'";
 $stmt->execute();
 $comments = $stmt->fetchAll(PDO::FETCH_ASSOC);
 
-if (isset($_GET['id'])) { // Retrieve quote to be edited, if id GET parameter is in URL.
+if (isset($_GET['id']) && isset($_GET['design_name'])) { // Retrieve quote to be edited, if id GET parameter is in URL.
     // Sanitize the id. 
     $designId = filter_input(INPUT_GET, 'id', FILTER_SANITIZE_NUMBER_INT);
+    $slug = filter_input(INPUT_GET, 'design_name', FILTER_SANITIZE_FULL_SPECIAL_CHARS);
     $_SESSION["designId"] = $designId;
     // Build the parametrized SQL query using the filtered id.
-    $query = "SELECT * FROM designs WHERE designId = :designId";
+    $query = "SELECT * FROM designs WHERE designId = :designId && slug = :slug";
     $statement = $db->prepare($query);
     $statement->bindValue(':designId', $designId, PDO::PARAM_INT);
-    
+    $statement->bindValue(':slug', $slug, PDO::PARAM_STR);
     // Execute the SELECT and fetch the single row returned.
     $statement->execute();
     $designs = $statement->fetch();
-    //$display = $designs['image'];
-    //echo $display;
-}  
+}
+
+if ($designs===false) {
+    header("Location: index.php");
+    exit;
+}
 
 if (isset($_GET['comment_reply'])) { // Retrieve quote to be edited, if id GET parameter is in URL.
     // Sanitize the id. 
@@ -49,15 +53,6 @@ if (isset($_GET['comment_reply'])) { // Retrieve quote to be edited, if id GET p
     $comments = $statement->fetch();
     //$display = $designs['image'];
 } 
-
-/*function validateID(){
-	return filter_input(INPUT_GET, 'design-name', FILTER_VALIDATE_INT);
-}
-
-if(validateID() == false){
-	header('Location: adminwelcome.php');
-	exit;
-}*/
 
 ?>
 
@@ -90,12 +85,13 @@ if(validateID() == false){
 		          <a class="nav-link active" aria-current="page" href="index.php">Home</a>
 		        </li>
 		        <li class="nav-item">
-		          <a class="nav-link" aria-current="page" href="#">Explore</a>
+		          <a class="nav-link" aria-current="page" href="explore.php">Explore</a>
 		        </li>
 		      </ul>
 		      <ul class="nav navbar-nav navbar-right">
 		      	<?php if(isset($_SESSION["adminloggedin"]) && $_SESSION["adminloggedin"] === true) {?>
 		      		<a class="nav-link" aria-current="page" href="#">Welcome, <b><?php echo htmlspecialchars($_SESSION["username"]); ?></b>.</a>
+		      		<a class="nav-link" aria-current="page" href="allpages.php">All Pages</a>
                 <a class="nav-link" aria-current="page" href="editcomments.php">Comments</a>
                 <!-- <a class="nav-link" aria-current="page" href="design_category.php">Design-Category</a> -->
                 <a class="nav-link" aria-current="page" href="editcategories.php">Categories</a>
@@ -125,22 +121,16 @@ if(validateID() == false){
     <main class="container">
       <ul class="nav nav-fill w-100">
 		    <li class="nav-item">
-		      <a class="nav-link" href="#">Dolores</a>
+		      <a class="nav-link" aria-current="page" href="adire.php">Adire</a>
 		    </li>
 		    <li class="nav-item">
-		      <a class="nav-link active" aria-current="page" href="#">Bubbles</a>
+		      <a class="nav-link" aria-current="page" href="ankara.php">Ankara</a>
 		    </li>
 		    <li class="nav-item">
-		      <a class="nav-link" href="#">Dolores</a>
+		      <a class="nav-link" aria-current="page" href="asooke.php">Aso Oke</a>
 		    </li>
 		    <li class="nav-item">
-		      <a class="nav-link active" aria-current="page" href="#">Bubbles</a>
-		    </li>
-		    <li class="nav-item">
-		      <a class="nav-link" href="#">Dolores</a>
-		    </li>
-		    <li class="nav-item">
-		      <a class="nav-link active" aria-current="page" href="#">Bubbles</a>
+		      <a class="nav-link" aria-current="page" href="lace.php">Lace</a>
 		    </li>
 	  	</ul>
 	  	<h1><?= $designs['name'] ?></h1>
@@ -151,7 +141,7 @@ if(validateID() == false){
             </div>
             <div class="mb-3">
 				<?php if (isset($_SESSION["adminId"])): ?>
-					<a href="edit_show_design.php?id=<?php echo $_SESSION["designId"]; ?>"> Edit Design</a>
+					<a href="edit_show_design.php?id=<?php echo $_SESSION["designId"]; ?>&design_name=<?php echo $designs["slug"]; ?>"> Edit Design</a>
 				<?php endif ?>
 			</div>      			
             <div class="mb-3">
@@ -160,6 +150,7 @@ if(validateID() == false){
 						<textarea name="comment_text" id="comment_text" class="ckeditor" cols="30" rows="3"></textarea>
 						<hr>
 						<input type="hidden" name="designId" value="<?= $designs['designId'] ?>">
+						<?php $_SESSION["designName"] = $designs['slug']; ?>
 						<input type="hidden" name="username" value="<?= $_SESSION["username"] ?>">
 						<div class="mb-3">
 							<div class="form-group col-6">
@@ -176,7 +167,8 @@ if(validateID() == false){
 				<?php else: ?>
 					<hr>
 					<div class="mb-3">
-						<p><a href="login.php?id=<?php echo $designs['designId']; ?>">Sign in</a> to post a comment.</p>
+						<p><a href="login.php?id=<?php echo $designs['designId']; ?>&design_name=<?php echo $designs['slug']; ?>">Sign in</a> to post a comment.</p>
+						<?php $_SESSION["designName"] = $designs['slug']; ?>
 					</div>
 				<?php endif ?>
 				<!-- Display total number of comments on this post  -->

@@ -64,11 +64,12 @@ if($_SERVER["REQUEST_METHOD"] == "POST"){
                             $_SESSION["UserId"] = $id;
                             $_SESSION["username"] = $username;
                             $designId = $_SESSION["designId"];
+                            $name = $_SESSION["designName"];
                             echo $designId;                          
                             
                             // Redirect user to welcome page
                             if (isset($_SESSION["designId"])){
-                                header("Location: single_design.php?id='$designId'");
+                                header("Location: single_design.php?id=$designId&p=$name");
                             } else {
                                 header("Location: index.php");
                             }

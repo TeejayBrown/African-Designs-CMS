@@ -57,50 +57,43 @@ if(!isset($_SESSION["designerloggedin"]) || $_SESSION["designerloggedin"] !== tr
     <title>African Design</title>
   </head>
 <body>
+    <nav class="navbar navbar-expand-lg navbar-light bg-light">
+        <div class="container">
+            <a class="navbar-brand" href="index.php">African Designs</a>
+            <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarText" aria-controls="navbarText" aria-expanded="false" aria-label="Toggle navigation">
+            <span class="navbar-toggler-icon"></span>
+            </button>
+            <div class="collapse navbar-collapse" id="navbarSupportedContent">
+                <ul class="navbar-nav me-auto mb-2 mb-lg-0">
+                    <li class="nav-item">
+                        <a class="nav-link active" aria-current="page" href="index.php">Home</a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link" aria-current="page" href="#">Explore</a>
+                    </li>
+                </ul>
+                <ul class="nav navbar-nav navbar-right">
+                    <a class="nav-link" aria-current="page" href="#">Welcome, <b><?php echo htmlspecialchars($_SESSION["username"]); ?></b>.</a>
+                    <a class="nav-link active" aria-current="page" href="design.php">Upload Design</a>
+                    <a class="nav-link" aria-current="page" href="password_reset_designer.php">Reset Password</a>
+                    <a class="nav-link" aria-current="page" href="logout.php">Sign Out</a>
+                </ul>
+            </div>
+      </div>
+    </nav>
     <main class="container">
-        <nav class="navbar navbar-expand-lg navbar-light bg-light">
-            <div class="container">
-                <a class="navbar-brand" href="index.php">African Designs</a>
-                <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarText" aria-controls="navbarText" aria-expanded="false" aria-label="Toggle navigation">
-                <span class="navbar-toggler-icon"></span>
-                </button>
-                <div class="collapse navbar-collapse" id="navbarSupportedContent">
-                    <ul class="navbar-nav me-auto mb-2 mb-lg-0">
-                        <li class="nav-item">
-                            <a class="nav-link active" aria-current="page" href="index.php">Home</a>
-                        </li>
-                        <li class="nav-item">
-                            <a class="nav-link" aria-current="page" href="comments.php">Link</a>
-                        </li>
-                    </ul>
-                    <ul class="nav navbar-nav navbar-right">
-                        <a class="nav-link" aria-current="page" href="#">Welcome, <b><?php echo htmlspecialchars($_SESSION["username"]); ?></b>.</a>
-                        <a class="nav-link active" aria-current="page" href="design.php">Upload Design</a>
-                        <a class="nav-link" aria-current="page" href="password_reset_designer.php">Reset Password</a>
-                        <a class="nav-link" aria-current="page" href="logout.php">Sign Out</a>
-                    </ul>
-                </div>
-          </div>
-        </nav>
-    
         <ul class="nav nav-fill w-100">
             <li class="nav-item">
-                <a class="nav-link" href="#">Dolores</a>
+              <a class="nav-link" aria-current="page" href="adire.php">Adire</a>
             </li>
             <li class="nav-item">
-                <a class="nav-link active" aria-current="page" href="#">Bubbles</a>
+              <a class="nav-link" aria-current="page" href="ankara.php">Ankara</a>
             </li>
             <li class="nav-item">
-                <a class="nav-link" href="#">Dolores</a>
+              <a class="nav-link" aria-current="page" href="asooke.php">Aso Oke</a>
             </li>
             <li class="nav-item">
-                <a class="nav-link active" aria-current="page" href="#">Bubbles</a>
-            </li>
-            <li class="nav-item">
-                <a class="nav-link" href="#">Dolores</a>
-            </li>
-            <li class="nav-item">
-            <a class="nav-link active" aria-current="page" href="#">Bubbles</a>
+              <a class="nav-link" aria-current="page" href="lace.php">Lace</a>
             </li>
         </ul>
         <h1>Design Upload</h1>

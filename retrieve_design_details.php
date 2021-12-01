@@ -8,7 +8,7 @@ exit;
 /// end of checking injection attack ////
 require('db_connect.php');
 
-$query="SELECT designId, name, description FROM designs WHERE designId = '$designId'";
+$query="SELECT designId, name, slug, description FROM designs WHERE designId = '$designId'";
 $statement=$db->prepare($query);
 //$statement = bindParam(':categoryId', $categoryId, PDO::PARAM_INT,5);
 $statement->execute();

@@ -76,14 +76,15 @@ function formatdate($date) {
             <div class="collapse navbar-collapse" id="navbarSupportedContent">
                 <ul class="navbar-nav me-auto mb-2 mb-lg-0">
                     <li class="nav-item">
-                        <a class="nav-link active" aria-current="page" href="index.php">Home</a>
+                        <a class="nav-link" aria-current="page" href="index.php">Home</a>
                     </li>
                     <li class="nav-item">
-                        <a class="nav-link" aria-current="page" href="#">Explore</a>
+                        <a class="nav-link" aria-current="page" href="explore.php">Explore</a>
                     </li>
                 </ul>
                 <ul class="nav navbar-nav navbar-right">
                     <a class="nav-link" aria-current="page" href="#">Welcome, <b><?php echo htmlspecialchars($_SESSION["username"]); ?></b>.</a>
+                    <a class="nav-link" aria-current="page" href="allpages.php">All Pages</a>
                     <a class="nav-link active" aria-current="page" href="editcomments.php">Comments</a>
                     <!-- <a class="nav-link" aria-current="page" href="design_category.php">Design-Category</a> -->
                     <a class="nav-link" aria-current="page" href="editcategories.php">Categories</a>
@@ -97,22 +98,16 @@ function formatdate($date) {
     <main class="container">
         <ul class="nav nav-fill w-100">
             <li class="nav-item">
-                <a class="nav-link" href="#">Dolores</a>
+              <a class="nav-link" aria-current="page" href="adire.php">Adire</a>
             </li>
             <li class="nav-item">
-                <a class="nav-link active" aria-current="page" href="#">Bubbles</a>
+              <a class="nav-link" aria-current="page" href="ankara.php">Ankara</a>
             </li>
             <li class="nav-item">
-                <a class="nav-link" href="#">Dolores</a>
+              <a class="nav-link" aria-current="page" href="asooke.php">Aso Oke</a>
             </li>
             <li class="nav-item">
-                <a class="nav-link active" aria-current="page" href="#">Bubbles</a>
-            </li>
-            <li class="nav-item">
-                <a class="nav-link" href="#">Dolores</a>
-            </li>
-            <li class="nav-item">
-            <a class="nav-link active" aria-current="page" href="#">Bubbles</a>
+              <a class="nav-link" aria-current="page" href="lace.php">Lace</a>
             </li>
         </ul>
         <h1>Existing Comments</h1>
@@ -150,7 +145,7 @@ function formatdate($date) {
                 $.get('retrieve_comments.php', {'designId':designId},function(returnData){
                     $.each(returnData.data, function(key,value){
                         $('#blog').append("<h2>"+value.username+"</h2>");
-                        $('#blog').append("<p><small>"+value.comment_date+" - "+"<a href=edit_show_comment.php?id=" +value.commentId+ ">" + "edit" + "</a></small></p>");
+                        $('#blog').append("<p><small>"+value.comment_date+" - "+"<a href=edit_show_comment.php?id=" +value.commentId+"&comment_by=" +value.username+">" + "edit" + "</a></small></p>");
                         $('#blog').append( $("<p />").html(value.description).text() ).text();
                     });
                 }, 'json');

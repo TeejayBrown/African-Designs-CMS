@@ -32,14 +32,16 @@
         $description = strip_tags($_POST['description']);
         $description = filter_var($description, FILTER_SANITIZE_FULL_SPECIAL_CHARS);
         $name= filter_input(INPUT_POST, 'title', FILTER_SANITIZE_FULL_SPECIAL_CHARS);
+        $slug = strtolower(str_replace(" ", "-", $name));
         //$description = filter_input(INPUT_POST, 'description', FILTER_SANITIZE_FULL_SPECIAL_CHARS);
         
         //  Build the parameterized SQL query and bind to the above sanitized values.
-        $query = "INSERT INTO categories (name, description) VALUES (:name, :description)";
+        $query = "INSERT INTO categories (name, slug, description) VALUES (:name, :slug, :description)";
         $statement = $db->prepare($query); //Catch the statement and wait for values
         
         //  Bind values to the parameters
         $statement->bindvalue(':name', $name);
+        $statement->bindvalue(':slug', $slug);
         $statement->bindvalue(':description', $description);  
         
         //  Execute the INSERT.
@@ -58,13 +60,15 @@
         $description = strip_tags($_POST['description']);
         $description = filter_var($description, FILTER_SANITIZE_FULL_SPECIAL_CHARS);
         $name = filter_input(INPUT_POST, 'title', FILTER_SANITIZE_FULL_SPECIAL_CHARS);
+        $slug = strtolower(str_replace(" ", "-", $name));
         //$description = filter_input(INPUT_POST, 'description', FILTER_SANITIZE_FULL_SPECIAL_CHARS);
         $categoryId  = filter_input(INPUT_POST, 'categoryId', FILTER_SANITIZE_NUMBER_INT);
         
         // Build the parameterized SQL query and bind to the above sanitized values.
-        $query     = "UPDATE categories SET name= :name, description = :description WHERE categoryId = :categoryId";
+        $query     = "UPDATE categories SET name= :name, slug= :slug, description = :description WHERE categoryId = :categoryId";
         $statement = $db->prepare($query);
-        $statement->bindValue(':name', $name);        
+        $statement->bindValue(':name', $name);
+        $statement->bindvalue(':slug', $slug);        
         $statement->bindValue(':description', $description);
         $statement->bindValue(':categoryId', $categoryId, PDO::PARAM_INT);
         
@@ -72,7 +76,7 @@
         $statement->execute();
         
         // Redirect after update.
-        header("Location: editcategories.php?id={$id}");
+        header("Location: editcategories.php");
         exit;
     } else {
         $error_message = "An error occured while processing your post."; 
@@ -194,17 +198,19 @@
         $value = getCategoryId($_POST['categoryId']);
         $name= filter_input(INPUT_POST, 'designname', FILTER_SANITIZE_FULL_SPECIAL_CHARS);
         //$description = strip_tags($_POST['description']);
+        $slug = strtolower(str_replace(" ", "-", $name));
         $description = htmlspecialchars_decode($_POST['description']);
         $description = filter_var($description, FILTER_SANITIZE_FULL_SPECIAL_CHARS);
         //$description = filter_input(INPUT_POST, 'description', FILTER_SANITIZE_FULL_SPECIAL_CHARS);
         $categoryId = filter_input(INPUT_POST, 'categoryId', FILTER_SANITIZE_NUMBER_INT);
         $designerId = filter_input(INPUT_POST, 'designer', FILTER_SANITIZE_NUMBER_INT);
 
-        $query = "INSERT INTO designs (name, description, image, categoryId, designerId) VALUES (:name, :description, :image,:categoryId, :designerId)";
+        $query = "INSERT INTO designs (name, slug, description, image, categoryId, designerId) VALUES (:name, :slug, :description, :image,:categoryId, :designerId)";
         $statement = $db->prepare($query); //Catch the statement and wait for values
 
         //  Bind values to the parameters
         $statement->bindvalue(':name', $name);
+        $statement->bindvalue(':slug', $slug);
         $statement->bindvalue(':description', $description);
         $statement->bindvalue(':image', $new_image_path );  
         $statement->bindvalue(':categoryId', $categoryId);
@@ -223,14 +229,16 @@
         $description = strip_tags($_POST['description']);
         $description = filter_var($description, FILTER_SANITIZE_FULL_SPECIAL_CHARS);
         $name = filter_input(INPUT_POST, 'title', FILTER_SANITIZE_FULL_SPECIAL_CHARS);
+        $slug = strtolower(str_replace(" ", "-", $name));
         //$description = filter_input(INPUT_POST, 'description', FILTER_SANITIZE_FULL_SPECIAL_CHARS);
         $designId  = filter_input(INPUT_POST, 'designId', FILTER_SANITIZE_NUMBER_INT);
         $categoryId = filter_input(INPUT_POST, 'categoryId', FILTER_SANITIZE_NUMBER_INT);
         
         // Build the parameterized SQL query and bind to the above sanitized values.
-        $query     = "UPDATE designs SET name= :name, description = :description, categoryId = :categoryId WHERE designId = :designId";
+        $query     = "UPDATE designs SET name= :name, slug= :slug, description = :description, categoryId = :categoryId WHERE designId = :designId";
         $statement = $db->prepare($query);
-        $statement->bindValue(':name', $name);        
+        $statement->bindValue(':name', $name); 
+        $statement->bindValue(':slug', $slug);       
         $statement->bindValue(':description', $description);
         $statement->bindValue(':categoryId', $categoryId);
         $statement->bindValue(':designId', $designId, PDO::PARAM_INT);
@@ -240,7 +248,7 @@
         $statement->execute();
         
         // Redirect after update.
-        header("Location: editdesigns.php?id={$id}");
+        header("Location: single_design.php?id=$designId&design_name=$slug");
         exit;
     } else {
         $error_message = "An error occured while processing your post."; 

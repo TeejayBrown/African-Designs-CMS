@@ -2,7 +2,6 @@
 // Initialize the session
 require('db_connect.php');
 
-
 //$query = "SHOW TABLES FROM $dbname";
 //$query = "SHOW TABLE STATUS FROM $dbname ORDER BY Create_time";
 /*$query = "SELECT Table_name FROM information_schema.tables WHERE TABLE_SCHEMA ='serverside'";
@@ -29,12 +28,16 @@ function formatdate($date) {
     return date('F j, Y, g:i a', strtotime($date));
 }
 
+$query = "SELECT name FROM designs ORDER BY RAND()";
+$statement = $db->prepare($query);
+$statement->execute(); 
+$results = $statement->fetchAll(PDO::FETCH_ASSOC);
 $status = 0;
 
 if($_SERVER["REQUEST_METHOD"] == "POST"){
 
     if (isset($_POST['sortbydatecreated'])){
-        $query = "SELECT Table_name FROM information_schema.tables WHERE TABLE_SCHEMA ='serverside' ORDER BY Create_time";
+        $query = "SELECT name FROM designs ORDER BY created_date";
         $statement = $db->prepare($query);
         $statement->execute(); 
         $results = $statement->fetchAll(PDO::FETCH_ASSOC);
@@ -42,7 +45,7 @@ if($_SERVER["REQUEST_METHOD"] == "POST"){
     }
 
     if (isset($_POST['sortbytitle'])){
-        $query = "SELECT Table_name FROM information_schema.tables WHERE TABLE_SCHEMA ='serverside'";
+        $query = "SELECT name FROM designs";
         $statement = $db->prepare($query);
         $statement->execute(); 
         $results = $statement->fetchAll(PDO::FETCH_ASSOC);
@@ -70,7 +73,7 @@ if($_SERVER["REQUEST_METHOD"] == "POST"){
   </head>
 <body>
     <nav class="navbar navbar-expand-lg navbar-light bg-light">
-          <div class="container-fluid">
+        <div class="container-fluid">
             <a class="navbar-brand" href="index.php">African Designs</a>
             <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarSupportedContent" aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
               <span class="navbar-toggler-icon"></span>
@@ -78,10 +81,10 @@ if($_SERVER["REQUEST_METHOD"] == "POST"){
             <div class="collapse navbar-collapse" id="navbarSupportedContent">
                 <ul class="navbar-nav me-auto mb-2 mb-lg-0">
                     <li class="nav-item">
-                        <a class="nav-link active" aria-current="page" href="index.php">Home</a>
+                      <a class="nav-link active" aria-current="page" href="index.php">Home</a>
                     </li>
                     <li class="nav-item">
-                        <a class="nav-link" aria-current="page" href="#">Explore</a>
+                        <a class="nav-link" aria-current="page" href="explore.php">Explore</a>
                     </li>
                 </ul>
                 <ul class="nav navbar-nav navbar-right">
@@ -95,27 +98,22 @@ if($_SERVER["REQUEST_METHOD"] == "POST"){
                     <a class="nav-link" aria-current="page" href="logout.php">Sign Out</a>
                 </ul>
             </div>
+        </div>
       </div>
     </nav>
     <main class="container">
         <ul class="nav nav-fill w-100">
             <li class="nav-item">
-                <a class="nav-link" href="#">Dolores</a>
+              <a class="nav-link" aria-current="page" href="adire.php">Adire</a>
             </li>
             <li class="nav-item">
-                <a class="nav-link active" aria-current="page" href="#">Bubbles</a>
+              <a class="nav-link" aria-current="page" href="ankara.php">Ankara</a>
             </li>
             <li class="nav-item">
-                <a class="nav-link" href="#">Dolores</a>
+              <a class="nav-link" aria-current="page" href="asooke.php">Aso Oke</a>
             </li>
             <li class="nav-item">
-                <a class="nav-link active" aria-current="page" href="#">Bubbles</a>
-            </li>
-            <li class="nav-item">
-                <a class="nav-link" href="#">Dolores</a>
-            </li>
-            <li class="nav-item">
-            <a class="nav-link active" aria-current="page" href="#">Bubbles</a>
+              <a class="nav-link" aria-current="page" href="lace.php">Lace</a>
             </li>
         </ul>
         <h1>List of Pages</h1>
@@ -128,7 +126,17 @@ if($_SERVER["REQUEST_METHOD"] == "POST"){
                 </div>
             </form>
             <div class="mb-3">
-                <?php if ($status == 1) { ?>
+                <?php if ($status == 0) { ?>
+                    <div class="mb-3">
+                        <ul>
+                            <?php foreach($results as $result){ ?>
+                                <?php foreach($result as $key => $val){ ?>
+                                    <li><?php print_r("$val") ?></li>
+                                <?php } ?>
+                            <?php } ?>
+                        </ul> 
+                    </div>
+                <?php } elseif ($status == 1) { ?>
                     <div class="mb-3">
                         <ul>
                             <?php foreach($results as $result){ ?>
@@ -151,7 +159,7 @@ if($_SERVER["REQUEST_METHOD"] == "POST"){
                 <?php } ?>
             </div>
         </div>
-
+    </main>
     <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
     <script>
         $(document).ready(function(){
@@ -171,6 +179,6 @@ if($_SERVER["REQUEST_METHOD"] == "POST"){
         <!-- <div id="footer">
             Copyright 2021 - No Rights Reserved
         </div> -->
-    </main>
+    
 </body>
 </html>

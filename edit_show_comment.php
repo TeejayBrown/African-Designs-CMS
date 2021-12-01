@@ -1,43 +1,42 @@
 <?php
-	/* A Simple Blogging Application
-    Title : Edit Page - For Updating and Deleting Post
-    Date: September 27th 2021
-    Group 8: Taiwo Omoleye and Jan Cyruss Naniong
-    */
-    require('db_connect.php');
 
-    session_start();
-    require('authenticate.php');
+require('db_connect.php');
 
-    if(!isset($_SESSION["adminloggedin"]) || $_SESSION["adminloggedin"] !== true){
-    header("location: admin.php");
+session_start();
+require('authenticate.php');
+
+if(!isset($_SESSION["adminloggedin"]) || $_SESSION["adminloggedin"] !== true){
+header("location: admin.php");
+exit;
+}
+
+if (isset($_GET['id']) && isset($_GET['comment_by'])) { // Retrieve quote to be edited, if id GET parameter is in URL.
+    // Sanitize the id. 
+    $commentId = filter_input(INPUT_GET, 'id', FILTER_SANITIZE_NUMBER_INT);
+    $username = filter_input(INPUT_GET, 'comment_by', FILTER_SANITIZE_FULL_SPECIAL_CHARS);
+    // Build the parametrized SQL query using the filtered id.
+    $query = "SELECT * FROM comments WHERE commentId = :commentId && username = :username";
+    $statement = $db->prepare($query);
+    $statement->bindValue(':commentId', $commentId, PDO::PARAM_INT);
+    $statement->bindValue(':username', $username, PDO::PARAM_STR);
+    // Execute the SELECT and fetch the single row returned.
+    $statement->execute();
+    $comments = $statement->fetch();   
+} 
+
+if ($comments===false) {
+    header("Location: editcomments.php");
     exit;
-	}
-    
-    if (isset($_GET['id'])) { // Retrieve quote to be edited, if id GET parameter is in URL.
-        // Sanitize the id. 
-        $commentId = filter_input(INPUT_GET, 'id', FILTER_SANITIZE_NUMBER_INT);
-        
-        // Build the parametrized SQL query using the filtered id.
-        $query = "SELECT * FROM comments WHERE commentId = :commentId";
-        $statement = $db->prepare($query);
-        $statement->bindValue(':commentId', $commentId, PDO::PARAM_INT);
-        
-        // Execute the SELECT and fetch the single row returned.
-        $statement->execute();
-        $comments = $statement->fetch();
+}
 
-        
-    } 
+function validateID(){
+	return filter_input(INPUT_GET, 'id', FILTER_VALIDATE_INT);
+}
 
-    function validateID(){
-		return filter_input(INPUT_GET, 'id', FILTER_VALIDATE_INT);
-	}
-
-	if(validateID() == false){
-		header('Location: adminwelcome.php');
-		exit;
-	}
+if(validateID() == false){
+	header('Location: adminwelcome.php');
+	exit;
+}
 
 ?>
 
@@ -58,52 +57,47 @@
     <title>African Design</title>
   </head>
 <body>
+    <nav class="navbar navbar-expand-lg navbar-light bg-light">
+          <div class="container-fluid">
+            <a class="navbar-brand" href="index.php">African Designs</a>
+            <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarSupportedContent" aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
+              <span class="navbar-toggler-icon"></span>
+            </button>
+            <div class="collapse navbar-collapse" id="navbarSupportedContent">
+                <ul class="navbar-nav me-auto mb-2 mb-lg-0">
+                    <li class="nav-item">
+                        <a class="nav-link" aria-current="page" href="index.php">Home</a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link" aria-current="page" href="explore.php">Explore</a>
+                    </li>
+                </ul>
+                <ul class="nav navbar-nav navbar-right">
+                    <a class="nav-link" aria-current="page" href="#">Welcome, <b><?php echo htmlspecialchars($_SESSION["username"]); ?></b>.</a>
+                    <a class="nav-link" aria-current="page" href="allpages.php">All Pages</a>
+                    <a class="nav-link active" aria-current="page" href="editcomments.php">Comments</a>
+                    <!-- <a class="nav-link" aria-current="page" href="design_category.php">Design-Category</a> -->
+                    <a class="nav-link" aria-current="page" href="editcategories.php">Categories</a>
+                    <a class="nav-link" aria-current="page" href="editdesigns.php">Designs</a>
+                    <a class="nav-link" aria-current="page" href="password_reset_admin.php">Reset Password</a>
+                    <a class="nav-link" aria-current="page" href="logout.php">Sign Out</a>
+                </ul>
+            </div>
+      </div>
+    </nav>
     <main class="container">
-        <nav class="navbar navbar-expand-lg navbar-light bg-light">
-            <div class="container">
-                <a class="navbar-brand" href="index.php">African Designs</a>
-                <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarText" aria-controls="navbarText" aria-expanded="false" aria-label="Toggle navigation">
-                <span class="navbar-toggler-icon"></span>
-                </button>
-                <div class="collapse navbar-collapse" id="navbarSupportedContent">
-                    <ul class="navbar-nav me-auto mb-2 mb-lg-0">
-                        <li class="nav-item">
-                            <a class="nav-link" aria-current="page" href="index.php">Home</a>
-                        </li>
-                        <li class="nav-item">
-                            <a class="nav-link" aria-current="page" href="comments.php">Link</a>
-                        </li>
-                    </ul>
-                    <ul class="nav navbar-nav navbar-right">
-                        <a class="nav-link" aria-current="page" href="#">Welcome, <b><?php echo htmlspecialchars($_SESSION["username"]); ?></b>.</a>
-                        <a class="nav-link" aria-current="page" href="editcomments.php">Comments</a>
-                        <a class="nav-link active" aria-current="page" href="editcategories.php">Categories</a>
-                        <a class="nav-link" aria-current="page" href="editdesigns.php">Designs</a>
-                        <a class="nav-link" aria-current="page" href="password_reset_admin.php">Reset Password</a>
-                        <a class="nav-link" aria-current="page" href="logout.php">Sign Out</a>
-                    </ul>
-                </div>
-          </div>
-        </nav>
-    
         <ul class="nav nav-fill w-100">
             <li class="nav-item">
-                <a class="nav-link" href="#">Dolores</a>
+              <a class="nav-link" aria-current="page" href="adire.php">Adire</a>
             </li>
             <li class="nav-item">
-                <a class="nav-link active" aria-current="page" href="#">Bubbles</a>
+              <a class="nav-link" aria-current="page" href="ankara.php">Ankara</a>
             </li>
             <li class="nav-item">
-                <a class="nav-link" href="#">Dolores</a>
+              <a class="nav-link" aria-current="page" href="asooke.php">Aso Oke</a>
             </li>
             <li class="nav-item">
-                <a class="nav-link active" aria-current="page" href="#">Bubbles</a>
-            </li>
-            <li class="nav-item">
-                <a class="nav-link" href="#">Dolores</a>
-            </li>
-            <li class="nav-item">
-            <a class="nav-link active" aria-current="page" href="#">Bubbles</a>
+              <a class="nav-link" aria-current="page" href="lace.php">Lace</a>
             </li>
         </ul>
         <h1>Existing Comments</h1>
@@ -131,6 +125,6 @@
 		<div id="footer">
 			Copyright 2021 - No Rights Reserved
 		</div>
-	</div>
+	</main>
 </body>
 </html>

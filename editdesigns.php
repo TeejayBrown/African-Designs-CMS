@@ -50,15 +50,16 @@ if(!isset($_SESSION["adminloggedin"]) || $_SESSION["adminloggedin"] !== true){
                         <a class="nav-link active" aria-current="page" href="index.php">Home</a>
                     </li>
                     <li class="nav-item">
-                        <a class="nav-link" aria-current="page" href="#">Explore</a>
+                        <a class="nav-link" aria-current="page" href="explore.php">Explore</a>
                     </li>
                 </ul>
                 <ul class="nav navbar-nav navbar-right">
                     <a class="nav-link" aria-current="page" href="#">Welcome, <b><?php echo htmlspecialchars($_SESSION["username"]); ?></b>.</a>
-                    <a class="nav-link active" aria-current="page" href="editcomments.php">Comments</a>
+                    <a class="nav-link" aria-current="page" href="allpages.php">All Pages</a>
+                    <a class="nav-link" aria-current="page" href="editcomments.php">Comments</a>
                     <!-- <a class="nav-link" aria-current="page" href="design_category.php">Design-Category</a> -->
                     <a class="nav-link" aria-current="page" href="editcategories.php">Categories</a>
-                    <a class="nav-link" aria-current="page" href="editdesigns.php">Designs</a>
+                    <a class="nav-link active" aria-current="page" href="editdesigns.php">Designs</a>
                     <a class="nav-link" aria-current="page" href="password_reset_admin.php">Reset Password</a>
                     <a class="nav-link" aria-current="page" href="logout.php">Sign Out</a>
                 </ul>
@@ -68,22 +69,16 @@ if(!isset($_SESSION["adminloggedin"]) || $_SESSION["adminloggedin"] !== true){
     <main class="container"> 
         <ul class="nav nav-fill w-100">
             <li class="nav-item">
-                <a class="nav-link" href="#">Dolores</a>
+              <a class="nav-link" aria-current="page" href="adire.php">Adire</a>
             </li>
             <li class="nav-item">
-                <a class="nav-link active" aria-current="page" href="#">Bubbles</a>
+              <a class="nav-link" aria-current="page" href="ankara.php">Ankara</a>
             </li>
             <li class="nav-item">
-                <a class="nav-link" href="#">Dolores</a>
+              <a class="nav-link" aria-current="page" href="asooke.php">Aso Oke</a>
             </li>
             <li class="nav-item">
-                <a class="nav-link active" aria-current="page" href="#">Bubbles</a>
-            </li>
-            <li class="nav-item">
-                <a class="nav-link" href="#">Dolores</a>
-            </li>
-            <li class="nav-item">
-            <a class="nav-link active" aria-current="page" href="#">Bubbles</a>
+              <a class="nav-link" aria-current="page" href="lace.php">Lace</a>
             </li>
         </ul>
         <h1>Existing Designs</h1>
@@ -124,7 +119,7 @@ if(!isset($_SESSION["adminloggedin"]) || $_SESSION["adminloggedin"] !== true){
                 $('#details').empty();
                 $.get('retrieve_design_details.php', {'designId':designId},function(returnData){
                     $.each(returnData.data, function(key,value){
-                        $('#details').append("<h2>"+value.name+" - "+"<a href=edit_show_design.php?id=" +value.designId+ ">" + "edit" + "</h2>");
+                        $('#details').append("<h2>"+value.name+" - "+"<a href=edit_show_design.php?id=" +value.designId+"&design_name=" +value.slug+ ">" + "edit" + "</h2>");
                         $('#details').append("<p>"+ value.description+"</p>");
                     });
                 }, 'json');

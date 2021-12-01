@@ -1,8 +1,8 @@
  <?php
 session_start();
- 
 require('db_connect.php');
 include ('image_display.php');
+
 
 $status = 0;
 
@@ -17,21 +17,8 @@ catch(Exception $ex) {
  echo ($ex -> getMessage());
 }
 
-if($_SERVER["REQUEST_METHOD"] == "POST"){
-  if (isset($_POST['search']) && strlen($_POST['searchtext']) >=1) {
-      //  Sanitize user input to escape HTML entities and filter out dangerous characters.
-      $searchtext = filter_input(INPUT_POST, 'searchtext', FILTER_SANITIZE_FULL_SPECIAL_CHARS);
-      $categoryId = filter_input(INPUT_POST, 'category', FILTER_SANITIZE_NUMBER_INT);
-
-      $query = "SELECT * FROM designs WHERE name OR description LIKE '%$searchtext%' AND categoryId = '$categoryId'";
-      $statement = $db->prepare($query); //Catch the statement and wait for values
-      $statement->execute();
-      $results = $statement->fetchAll();
-
-      $status = 1;
-  }
-}
-
+include ('search.php');
+ 
 ?> 
 
 
@@ -63,7 +50,7 @@ if($_SERVER["REQUEST_METHOD"] == "POST"){
 		          <a class="nav-link active" aria-current="page" href="index.php">Home</a>
 		        </li>
 		        <li class="nav-item">
-		          <a class="nav-link" aria-current="page" href="#">Explore</a>
+		          <a class="nav-link" aria-current="page" href="explore.php">Explore</a>
 		        </li>
 		      </ul>
 		      <ul class="nav navbar-nav navbar-right">
@@ -118,9 +105,9 @@ if($_SERVER["REQUEST_METHOD"] == "POST"){
 	        <div class="search-box">
 	            <div class="form-group">
 	            	<form class="d-inline-flex p-3" action="<?php echo htmlspecialchars($_SERVER["PHP_SELF"]); ?>" method="post">
-					        <input class="form-control" type="search" name= "searchtext" placeholder="Search for designs" aria-label="Search">
+					        <input class="form-control" type="search" id= "search" name= "searchtext" placeholder="Search for designs" onfocus="this.value=''" value= "<?php echo (isset($_POST["searchtext"]) ? $_POST["searchtext"] : '') ?>" aria-label="Search">
 			    				<select class="form-control" id="category" name="category">
-		                <option value='' selected="" disabled="">-- Select Category --</option>
+		                <option value="" selected="" disabled="">-- Select Category --</option>
 		                <?php
 		                    require('db_connect.php');
 		                    $sql="select * from categories ";  
@@ -137,13 +124,14 @@ if($_SERVER["REQUEST_METHOD"] == "POST"){
 	    </div>
 
 	    <hr>
+
 			<div class="container">
 				<?php if ($status == 0) { ?>
 					<div class="row">
 						<?php foreach($results  as $result): ?>
 				    <div class="col-md-4">
 				      <div class="thumbnail">
-				      	<a href="single_design.php?id=<?php echo $result['designId']; ?>">	      	
+				      	<a href="single_design.php?id=<?php echo $result['designId']; ?>&design_name=<?php echo $result['slug'];?>">	      	
 							   <img src="<?php  echo version_name(getImageFolder($result['image']), 'medium'); ?>" alt= "<?php echo $result['name']; ?> ">	
 							  </a>
 							</div>
@@ -157,18 +145,23 @@ if($_SERVER["REQUEST_METHOD"] == "POST"){
 							<?php foreach($results  as $result): ?>
 					    <div class="col-md-4">
 					      <div class="thumbnail">
-					      	<a href="single_design.php?id=<?php echo $result['designId']; ?>">	      	
+					      	<a href="single_design.php?id=<?php echo $result['designId']; ?>&p=<?php echo $result['slug'];?>">	      	
 								   <img src="<?php  echo version_name(getImageFolder($result['image']), 'medium'); ?>" alt= "<?php echo $result['name']; ?> ">	
 								  </a>
 								</div>
 							</div>
 							<?php endforeach ?>
+						<?php } elseif(!isset($categoryId)) { ?>
+							<p> Please select a category for the search.</p>
 						<?php } else { ?>
 							<p> Sorry, No result found! Try another search using different key word.</p>
 						<?php } ?>
 					</div>
-				<?php } ?>	
-			</div>	
+				<?php } ?>
+			</div>
+			<ul class="pagination">
+	        
+	    </ul>	
     </main>
   </body>
 <script

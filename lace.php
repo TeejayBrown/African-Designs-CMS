@@ -15,6 +15,8 @@ catch(Exception $ex) {
  echo ($ex -> getMessage());
 }
 
+//include ('search.php');
+
 ?> 
 
 
@@ -43,15 +45,16 @@ catch(Exception $ex) {
 		    <div class="collapse navbar-collapse" id="navbarSupportedContent">
 		      <ul class="navbar-nav me-auto mb-2 mb-lg-0">
 		        <li class="nav-item">
-		          <a class="nav-link active" aria-current="page" href="index.php">Home</a>
+		          <a class="nav-link" aria-current="page" href="index.php">Home</a>
 		        </li>
 		        <li class="nav-item">
-		          <a class="nav-link" aria-current="page" href="#">Explore</a>
+		          <a class="nav-link" aria-current="page" href="explore.php">Explore</a>
 		        </li>
 		      </ul>
 		      <ul class="nav navbar-nav navbar-right">
 		      	<?php if(isset($_SESSION["adminloggedin"]) && $_SESSION["adminloggedin"] === true) {?>
 		      		<a class="nav-link" aria-current="page" href="#">Welcome, <b><?php echo ucfirst(htmlspecialchars($_SESSION["username"])); ?></b>.</a>
+		      		<a class="nav-link" aria-current="page" href="allpages.php">All Pages</a>
                 <a class="nav-link" aria-current="page" href="editcomments.php">Comments</a>
                 <!-- <a class="nav-link" aria-current="page" href="design_category.php">Design-Category</a> -->
                 <a class="nav-link" aria-current="page" href="editcategories.php">Categories</a>
@@ -94,27 +97,13 @@ catch(Exception $ex) {
 		      <a class="nav-link lace" aria-current="page" href="lace.php">Lace</a>
 		    </li>
 	  	</ul>
-	
-	  	<div class="card" >
-	        <img class="img-fluid" src="images/designs.jpg" alt="Robots in the Park">
-	        <div class="search-box">
-	            <div class="form-group">
-	            	<form class="d-inline-flex p-3">
-				        <input class="form-control" type="search" placeholder="Search for designs" aria-label="Search">
-	    				<button class="btn btn-primary" type="submit">Search</button>
-				     </form>
-				     <p>Trending:</p>
-	            </div>
-	        </div>
-	    </div>
-
 	    <hr>
 			<div class="container">
 				<div class="row">
 					<?php foreach($results  as $result): ?>
 			    <div class="col-md-4">
 			      <div class="thumbnail">
-			      	<a href="single_design.php?id=<?php echo $result['designId']; ?>">	      	
+			      	<a href="single_design.php?id=<?php echo $result['designId']; ?>&design_name=<?php echo $result['slug'];?>">	      	
 						   <img src="<?php  echo version_name(getImageFolder($result['image']), 'medium'); ?>" alt= "<?php echo $result['name']; ?> ">	
 
 						  </a>
