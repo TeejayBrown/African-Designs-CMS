@@ -107,6 +107,7 @@ if(!isset($_SESSION["adminloggedin"]) || $_SESSION["adminloggedin"] !== true){
         <div class="container">
             <a href="category.php" class="btn btn-primary btn-lg active" role="button" aria-pressed="true">Add Category</a>
         </div>
+    </main>
     <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
     <script>
         $(document).ready(function(){
@@ -122,9 +123,6 @@ if(!isset($_SESSION["adminloggedin"]) || $_SESSION["adminloggedin"] !== true){
             });
         });
     </script>
-        <!-- <div id="footer">
-            Copyright 2021 - No Rights Reserved
-        </div> -->
-    </main>
+    <?php include("footer.php") ?>
 </body>
 </html>

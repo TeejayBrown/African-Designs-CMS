@@ -3,6 +3,24 @@ session_start();
  
 require('db_connect.php');
 include ('image_display.php');
+ 
+// Check if the user is logged in, if not then redirect him to login page
+if(!isset($_SESSION["designerloggedin"]) || $_SESSION["designerloggedin"] !== true){
+    header("location: designerlogin.php");
+    exit;
+}
+$designerId = $_SESSION["designerId"];
+
+$query = "SELECT * FROM designs WHERE designerId = $designerId";
+try{
+    $statement = $db->prepare($query);
+     // Execution on the DB server is delayed until we execute().
+     $statement->execute(); 
+     $results = $statement->fetchAll();
+} 
+catch(Exception $ex) {
+ echo ($ex -> getMessage());
+}
 
 ?> 
 
@@ -86,14 +104,12 @@ include ('image_display.php');
 		    </li>
 	  	</ul>
 	  	<hr>
-	  	<?php for ($i=1; $i <=4 ; $i++) { ?>
-	  		<?php include('exploreloop.php') ?>
 				<div class="container">
 					<div class="row">
 						<?php foreach($results  as $result): ?>
 				    <div class="col-md-4">
 				      <div class="thumbnail">
-				      	<a href="single_design.php?id=<?php echo $result['designId']; ?>&design_name=<?php echo $result['slug'];?>">	      	
+				      	<a href="view_delete_design.php?id=<?php echo $result['designId']; ?>&design_name=<?php echo $result['slug'];?>">	      	
 							   <img src="<?php  echo version_name(getImageFolder($result['image']), 'medium'); ?>" alt= "<?php echo $result['name']; ?> ">	
 							  </a>
 							</div>
@@ -101,8 +117,6 @@ include ('image_display.php');
 						<?php endforeach ?>
 					</div>	
 				</div>
-	  	<?php } ?>
-	  	<?php include("footer.php") ?>
     </main>
   </body>
 </html>

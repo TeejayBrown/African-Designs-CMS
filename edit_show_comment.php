@@ -122,9 +122,7 @@ if(validateID() == false){
 				</fieldset>
 			</form>	
 		</div>
-		<div id="footer">
-			Copyright 2021 - No Rights Reserved
-		</div>
+		<?php include("footer.php") ?>
 	</main>
 </body>
 </html>

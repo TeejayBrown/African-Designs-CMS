@@ -152,9 +152,7 @@ function formatdate($date) {
             });
         });
     </script>
-        <!-- <div id="footer">
-            Copyright 2021 - No Rights Reserved
-        </div> -->
+     <?php include("footer.php") ?>
     </main>
 </body>
 </html>

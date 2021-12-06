@@ -1,26 +1,60 @@
- <?php
-session_start();
+<?php 
+
 require('db_connect.php');
+//include ('comment_details.php');
 include ('image_display.php');
 
+//$userId = $_SESSION["UserId"];
+/*if (isset($_SESSION["UserId"])){
+	echo $_SESSION["UserId"];
+}*/
+session_start();
+/*if(!isset($_SESSION["loggedin"]) || $_SESSION["loggedin"] !== true){
+    header("location: index.php");
+    exit;
+	}*/
+$designId = filter_input(INPUT_GET, 'id', FILTER_SANITIZE_NUMBER_INT);
+$comments_query = "SELECT * FROM comments WHERE designId= '$designId' ORDER BY comment_date DESC";
+$stmt=$db->prepare($comments_query); //WHERE categoryId = '$categoryId'";
+$stmt->execute();
+$comments = $stmt->fetchAll(PDO::FETCH_ASSOC);
 
-$status = 0;
-
-$query = "SELECT * FROM designs ORDER BY RAND() LIMIT 15";
-try{
+if (isset($_GET['id']) && isset($_GET['design_name'])) { // Retrieve quote to be edited, if id GET parameter is in URL.
+    // Sanitize the id. 
+    $designId = filter_input(INPUT_GET, 'id', FILTER_SANITIZE_NUMBER_INT);
+    $slug = filter_input(INPUT_GET, 'design_name', FILTER_SANITIZE_FULL_SPECIAL_CHARS);
+    $_SESSION["designId"] = $designId;
+    // Build the parametrized SQL query using the filtered id.
+    $query = "SELECT * FROM designs WHERE designId = :designId && slug = :slug";
     $statement = $db->prepare($query);
-     // Execution on the DB server is delayed until we execute().
-     $statement->execute(); 
-     $results = $statement->fetchAll();
-} 
-catch(Exception $ex) {
- echo ($ex -> getMessage());
+    $statement->bindValue(':designId', $designId, PDO::PARAM_INT);
+    $statement->bindValue(':slug', $slug, PDO::PARAM_STR);
+    // Execute the SELECT and fetch the single row returned.
+    $statement->execute();
+    $designs = $statement->fetch();
 }
 
-include ('search.php');
- 
-?> 
+if ($designs===false) {
+    header("Location: index.php");
+    exit;
+}
 
+if (isset($_GET['comment_reply'])) { // Retrieve quote to be edited, if id GET parameter is in URL.
+    // Sanitize the id. 
+    $commentId = filter_input(INPUT_GET, 'comment_reply', FILTER_SANITIZE_NUMBER_INT);
+    
+    // Build the parametrized SQL query using the filtered id.
+    $query = "SELECT * FROM comments WHERE commentId = :commentId";
+    $statement = $db->prepare($query);
+    $statement->bindValue(':commentId', $commentId, PDO::PARAM_INT);
+    
+    // Execute the SELECT and fetch the single row returned.
+    $statement->execute();
+    $comments = $statement->fetch();
+    //$display = $designs['image'];
+} 
+
+?>
 
 <!DOCTYPE html>
 <html lang="en">
@@ -35,6 +69,7 @@ include ('search.php');
     />
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.4.1/font/bootstrap-icons.css" />
     <link rel="stylesheet" type="text/css" href="styles.css" />
+    <script type="text/javascript" src="ckeditor/ckeditor.js"></script>
     <title>African Design</title>
   </head>
   <body>
@@ -55,7 +90,7 @@ include ('search.php');
 		      </ul>
 		      <ul class="nav navbar-nav navbar-right">
 		      	<?php if(isset($_SESSION["adminloggedin"]) && $_SESSION["adminloggedin"] === true) {?>
-		      		<a class="nav-link" aria-current="page" href="#">Welcome, <b><?php echo ucfirst(htmlspecialchars($_SESSION["username"])); ?></b>.</a>
+		      		<a class="nav-link" aria-current="page" href="#">Welcome, <b><?php echo htmlspecialchars($_SESSION["username"]); ?></b>.</a>
 		      		<a class="nav-link" aria-current="page" href="allpages.php">All Pages</a>
                 <a class="nav-link" aria-current="page" href="editcomments.php">Comments</a>
                 <!-- <a class="nav-link" aria-current="page" href="design_category.php">Design-Category</a> -->
@@ -64,14 +99,13 @@ include ('search.php');
                 <a class="nav-link" aria-current="page" href="password_reset_admin.php">Reset Password</a>
                 <a class="nav-link" aria-current="page" href="logout.php">Sign Out</a>
 		      	<?php } elseif(isset($_SESSION["designerloggedin"]) && $_SESSION["designerloggedin"] === true) {?>
-		      		<a class="nav-link" aria-current="page" href="#">Welcome, <b><?php echo ucfirst(htmlspecialchars($_SESSION["username"])); ?></b>.</a>
-		      		<a class="nav-link" aria-current="page" href="addpage.php">New Page</a>
+		      		<a class="nav-link" aria-current="page" href="#">Welcome, <b><?php echo htmlspecialchars($_SESSION["username"]); ?></b>.</a>
 		      		<a class="nav-link" aria-current="page" href="mydesign.php">Designs</a>
-              <a class="nav-link" aria-current="page" href="design.php">Upload Designs</a>
+              <a class="nav-link active" aria-current="page" href="design.php">Upload Design</a>
               <a class="nav-link" aria-current="page" href="password_reset_designer.php">Reset Password</a>
               <a class="nav-link" aria-current="page" href="logout.php">Sign Out</a>
              <?php } elseif(isset($_SESSION["loggedin"]) && $_SESSION["loggedin"] === true) {?>
-            	<a class="nav-link" aria-current="page" href="#">Welcome, <b><?php echo ucfirst(htmlspecialchars($_SESSION["username"])); ?></b>.</a>
+            	<a class="nav-link" aria-current="page" href="#">Welcome, <b><?php echo htmlspecialchars($_SESSION["username"]); ?></b>.</a>
               <a class="nav-link" aria-current="page" href="design.php">Submit a design</a>
               <a class="nav-link" aria-current="page" href="password_reset.php">Reset Your Password</a>
               <a class="nav-link" aria-current="page" href="logout.php">Sign Out</a>
@@ -80,7 +114,6 @@ include ('search.php');
 			        <a class="nav-link " aria-current="page" href="login.php">Log in</a>
 			        <a class="nav-link " aria-current="page" href="designerlogin.php">Designer</a>
 			        <a class="nav-link " aria-current="page" href="admin.php">Admin</a>
-
 		     		<?php } ?>
 			  	</ul>
 		    </div>
@@ -101,65 +134,17 @@ include ('search.php');
 		      <a class="nav-link" aria-current="page" href="lace.php">Lace</a>
 		    </li>
 	  	</ul>
-	
-	  	<div class="card" >
-	        <img class="img-fluid" src="images/designs.jpg" alt="Robots in the Park">
-	        <div class="search-box">
-	            <div class="form-group">
-	            	<form class="d-inline-flex p-3" action="<?php echo htmlspecialchars($_SERVER["PHP_SELF"]); ?>" method="post">
-					        <input class="form-control" type="search" id= "search" name= "searchtext" placeholder="Search for designs" onfocus="this.value=''" value= "<?php echo (isset($_POST["searchtext"]) ? $_POST["searchtext"] : '') ?>" aria-label="Search">
-			    				<select class="form-control" id="category" name="category">
-		                <option value="" selected="" disabled="">-- Select Category --</option>
-		                <?php
-		                    require('db_connect.php');
-		                    $sql="select * from categories ";  
-		                    foreach ($db->query($sql) as $row) {
-		                    echo "<option value=$row[categoryId]>$row[name]</option>";
-		                    }
-		                ?>
-			            </select>
-			            <button class="btn btn-primary" type="submit" name= "search">Search</button>
-					     </form>
-					     <p>Trending:</p>
+	  	<h1><?= $designs['name'] ?></h1>
+        <hr>
+		<div class="container">
+			<form class="clearfix" action="process_post.php" method="post" id="comment_form" enctype="multipart/form-data">		
+	            <div class="mb-3">
+	                <img src="<?= getImageFolder($designs['image']) ?>" alt= <?= $designs['name'] ?>>
 	            </div>
-	        </div>
-	    </div>
-
-	    <hr>
-
-			<div class="container">
-				<?php if ($status == 0) { ?>
-					<div class="row">
-						<?php foreach($results  as $result): ?>
-				    <div class="col-md-4">
-				      <div class="thumbnail">
-				      	<a href="single_design.php?id=<?php echo $result['designId']; ?>&design_name=<?php echo $result['slug'];?>">	      	
-							   <img src="<?php  echo version_name(getImageFolder($result['image']), 'medium'); ?>" alt= "<?php echo $result['name']; ?> ">	
-							  </a>
-							</div>
-						</div>
-						<?php endforeach ?>
-					</div>
-				<?php } elseif ($status == 1) { ?>
-					<div class="row">
-						<?php if (count($results) > 0) { ?>
-							<p><?php echo count($results) ?> design(s) found.</p>
-							<?php foreach($results  as $result): ?>
-					    <div class="col-md-4">
-					      <div class="thumbnail">
-					      	<a href="single_design.php?id=<?php echo $result['designId']; ?>&design_name=<?php echo $result['slug'];?>">	      	
-								   <img src="<?php  echo version_name(getImageFolder($result['image']), 'medium'); ?>" alt= "<?php echo $result['name']; ?> ">	
-								  </a>
-								</div>
-							</div>
-							<?php endforeach ?>
-						<?php } else { ?>
-							<p> Sorry, No result found! Try another search using different key word.</p>
-						<?php } ?>
-					</div>
-				<?php } ?>
-			</div>
-    	<?php include("footer.php") ?>
+				<input type="hidden" name="designId" value="<?php echo $_SESSION["designId"]; ?>">
+				<input type="submit" name="delete_design" value="Delete" onclick="return confirm('Are you sure you wish to delete this design?')">
+			</form>      				
+		</div>		
     </main>
   </body>
 <script
@@ -167,6 +152,6 @@ include ('search.php');
   integrity="sha384-JEW9xMcG8R+pH31jmWH6WWP0WintQrMb4s7ZOdauHnUtxwoG2vI5DkLtS3qm9Ekf"
   crossorigin="anonymous"
 ></script>
-
+<script src="script.js"></script>
 </body>
 </html>

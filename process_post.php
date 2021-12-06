@@ -220,7 +220,8 @@
        $statement->execute();
 
         // Redirect after submit.
-        header("Location: index.php");
+        //header("Location: single_design.php?id=$designId&design_name=$slug");
+        header("Location: mydesign.php");
         exit;
     }       
 
@@ -344,6 +345,76 @@
         exit; 
         exit;
     }
+
+    if (isset($_POST["delete_design"]) && isset($_POST['designId'])) {
+        $designId = filter_input(INPUT_POST, 'designId', FILTER_SANITIZE_NUMBER_INT);
+
+        function getExtension($str){
+          $i = strrpos($str,".");
+          if (!$i) { return ""; }
+          $I = strlen($str) - $i;
+          $ext = substr($str,$i+1,$I);
+          return $ext;
+      }
+
+      function getFilename($str){
+          $i = strrpos($str,".");
+          if (!$i) { return ""; }
+          $I = strlen($str) - $i;
+          $ext = substr($str,0,-$I);
+          return $ext;
+      }
+
+      function version_name($str, $name){
+          if ($name == 'medium'){
+              $mid1 = '_'. $name.'.';
+              $result =  getFilename($str).$mid1.getExtension($str);
+          } elseif($name == 'thumbnail'){
+              $mid1 = '_'. $name.'.';
+              $result =  getFilename($str).$mid1.getExtension($str);
+          } else{
+              $result = "";
+          }
+          return $result;
+      } 
+        
+        //Retrieve data from database
+        $qry = "SELECT * FROM designs WHERE designId= $designId";
+        $stmt = $db->prepare($qry); 
+        $stmt->execute(); 
+
+        $record = $stmt->fetch();
+        //Obtain the image path
+        //"C:\xampp\htdocs\wd2\Project\uploads\webdev1.png"
+        //"uploads/".version_name($image_filename , 'medium')
+        $imageMainPath = $record['image'];
+        $imageMediumPath = version_name($record['image'], 'medium');
+        $imageThumbnailPath = version_name($record['image'], 'thumbnail');
+        //echo version_name($result['image'], 'medium')
+
+        //check if image exists
+        if(file_exists($imageMainPath)){
+
+            //delete the image
+            unlink($imageMainPath);
+            unlink($imageMediumPath);
+            unlink($imageThumbnailPath);
+
+            //after deleting image you can delete the record
+            $query = "DELETE FROM designs WHERE designId=$designId LIMIT 1";
+            $statement = $db->prepare($query);
+            $statement->execute();
+        }
+        /*$query = "DELETE FROM designs WHERE designId=$designId LIMIT 1";
+            $statement = $db->prepare($query);
+            $statement->execute();*/
+        // Redirect after update.
+        header("Location: mydesign.php");
+        exit;
+    } else {
+        $error_message = "An error occured while processing your deletion."; 
+        $error_detail = "Delete comment associated with the design.";
+    }
        
 ?>
 
@@ -361,7 +432,7 @@
         </div>
         <h1><?= $error_message ?></h1>
         <p><?= $error_detail ?></p>
-        <a href="adminwelcome.php">Return Home</a>
+        <a href="index.php">Return Home</a>
         <div id="footer">
             Copyright 2021 - No Rights Reserved
         </div>

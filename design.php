@@ -58,7 +58,7 @@ if(!isset($_SESSION["designerloggedin"]) || $_SESSION["designerloggedin"] !== tr
   </head>
 <body>
     <nav class="navbar navbar-expand-lg navbar-light bg-light">
-        <div class="container">
+        <div class="container-fluid">
             <a class="navbar-brand" href="index.php">African Designs</a>
             <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarText" aria-controls="navbarText" aria-expanded="false" aria-label="Toggle navigation">
             <span class="navbar-toggler-icon"></span>
@@ -74,6 +74,7 @@ if(!isset($_SESSION["designerloggedin"]) || $_SESSION["designerloggedin"] !== tr
                 </ul>
                 <ul class="nav navbar-nav navbar-right">
                     <a class="nav-link" aria-current="page" href="#">Welcome, <b><?php echo htmlspecialchars($_SESSION["username"]); ?></b>.</a>
+                    <a class="nav-link" aria-current="page" href="mydesign.php">Designs</a>
                     <a class="nav-link active" aria-current="page" href="design.php">Upload Design</a>
                     <a class="nav-link" aria-current="page" href="password_reset_designer.php">Reset Password</a>
                     <a class="nav-link" aria-current="page" href="logout.php">Sign Out</a>

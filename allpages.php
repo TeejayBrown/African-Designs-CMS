@@ -1,6 +1,7 @@
 <?php
 // Initialize the session
 require('db_connect.php');
+include ('image_display.php');
 
 //$query = "SHOW TABLES FROM $dbname";
 //$query = "SHOW TABLE STATUS FROM $dbname ORDER BY Create_time";
@@ -28,7 +29,7 @@ function formatdate($date) {
     return date('F j, Y, g:i a', strtotime($date));
 }
 
-$query = "SELECT name FROM designs ORDER BY RAND()";
+$query = "SELECT * FROM designs ORDER BY RAND()";
 $statement = $db->prepare($query);
 $statement->execute(); 
 $results = $statement->fetchAll(PDO::FETCH_ASSOC);
@@ -37,7 +38,7 @@ $status = 0;
 if($_SERVER["REQUEST_METHOD"] == "POST"){
 
     if (isset($_POST['sortbydatecreated'])){
-        $query = "SELECT name FROM designs ORDER BY created_date";
+        $query = "SELECT * FROM designs ORDER BY created_date ASC";
         $statement = $db->prepare($query);
         $statement->execute(); 
         $results = $statement->fetchAll(PDO::FETCH_ASSOC);
@@ -45,7 +46,7 @@ if($_SERVER["REQUEST_METHOD"] == "POST"){
     }
 
     if (isset($_POST['sortbytitle'])){
-        $query = "SELECT name FROM designs";
+        $query = "SELECT * FROM designs ORDER BY name ASC";
         $statement = $db->prepare($query);
         $statement->execute(); 
         $results = $statement->fetchAll(PDO::FETCH_ASSOC);
@@ -88,7 +89,7 @@ if($_SERVER["REQUEST_METHOD"] == "POST"){
                     </li>
                 </ul>
                 <ul class="nav navbar-nav navbar-right">
-                    <a class="nav-link" aria-current="page" href="#">Welcome, <b><?php echo htmlspecialchars($_SESSION["username"]); ?></b>.</a>
+                    <a class="nav-link" aria-current="page" href="#">Welcome, <b><?php echo ucfirst(htmlspecialchars($_SESSION["username"])); ?></b>.</a>
                     <a class="nav-link active" aria-current="page" href="allpages.php">All Pages</a>
                     <a class="nav-link active" aria-current="page" href="editcomments.php">Comments</a>
                     <!-- <a class="nav-link" aria-current="page" href="design_category.php">Design-Category</a> -->
@@ -130,9 +131,12 @@ if($_SERVER["REQUEST_METHOD"] == "POST"){
                     <div class="mb-3">
                         <ul>
                             <?php foreach($results as $result){ ?>
-                                <?php foreach($result as $key => $val){ ?>
-                                    <li><?php print_r("$val") ?></li>
-                                <?php } ?>
+                                    <li>
+                                        <a href="view_delete_design.php?id=<?php echo $result['designId']; ?>&design_name=<?php echo $result['slug'];?>">            
+                                        <img src="<?php  echo version_name(getImageFolder($result['image']), 'thumbnail'); ?>" alt= "<?php echo $result['name']; ?> ">  
+                                       </a>
+                                        <a href="view_delete_design.php?id=<?php echo $result['designId']; ?>&design_name=<?php echo $result['slug'];?>"> <?php echo $result['name'] ?></a>
+                                    </li>
                             <?php } ?>
                         </ul> 
                     </div>
@@ -140,9 +144,13 @@ if($_SERVER["REQUEST_METHOD"] == "POST"){
                     <div class="mb-3">
                         <ul>
                             <?php foreach($results as $result){ ?>
-                                <?php foreach($result as $key => $val){ ?>
-                                    <li><?php print_r("$val") ?></li>
-                                <?php } ?>
+                                    <li>
+                                        <a href="view_delete_design.php?id=<?php echo $result['designId']; ?>&design_name=<?php echo $result['slug'];?>">            
+                                        <img src="<?php  echo version_name(getImageFolder($result['image']), 'thumbnail'); ?>" alt= "<?php echo $result['name']; ?> ">  
+                                       </a>
+                                        <a href="view_delete_design.php?id=<?php echo $result['designId']; ?>&design_name=<?php echo $result['slug'];?>"> <?php echo $result['name'] ?>
+                                        </a>
+                                    </li>
                             <?php } ?>
                         </ul> 
                     </div>
@@ -150,15 +158,20 @@ if($_SERVER["REQUEST_METHOD"] == "POST"){
                     <div class="mb-3">
                         <ul>
                             <?php foreach($results as $result){ ?>
-                                <?php foreach($result as $key => $val){ ?>
-                                    <li><?php print_r("$val") ?></li>
-                                <?php } ?>
+                                <li>
+                                    <a href="view_delete_design.php?id=<?php echo $result['designId']; ?>&design_name=<?php echo $result['slug'];?>">            
+                                    <img src="<?php  echo version_name(getImageFolder($result['image']), 'thumbnail'); ?>" alt= "<?php echo $result['name']; ?> ">  
+                                   </a>
+                                    <a href="view_delete_design.php?id=<?php echo $result['designId']; ?>&design_name=<?php echo $result['slug'];?>"> <?php echo $result['name'] ?>
+                                    </a>
+                                </li>
                             <?php } ?>
                         </ul> 
                     </div>
                 <?php } ?>
             </div>
         </div>
+        <?php include("footer.php") ?>
     </main>
     <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
     <script>

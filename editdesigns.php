@@ -104,13 +104,8 @@ if(!isset($_SESSION["adminloggedin"]) || $_SESSION["adminloggedin"] !== true){
                 <p id="description" name="description"></p>
             </div>
         </div>
-        <!-- <hr>
-        <div class="container">
-            <a href="design.php" class="btn btn-primary btn-lg active" role="button" aria-pressed="true">Add Design</a>
-        </div> -->
-        <!-- <div id="footer">
-            Copyright 2021 - No Rights Reserved
-        </div> -->
+        <?php include("footer.php") ?>
+    </main>
     <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
     <script>
         $(document).ready(function(){
@@ -126,6 +121,5 @@ if(!isset($_SESSION["adminloggedin"]) || $_SESSION["adminloggedin"] !== true){
             });
         });
     </script>
-    </main>
 </body>
 </html>
