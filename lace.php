@@ -51,12 +51,11 @@ catch(Exception $ex) {
 		          <a class="nav-link" aria-current="page" href="explore.php">Explore</a>
 		        </li>
 		      </ul>
-		      <ul class="nav navbar-nav navbar-right">
+		      <div class="nav navbar-nav navbar-right">
 		      	<?php if(isset($_SESSION["adminloggedin"]) && $_SESSION["adminloggedin"] === true) {?>
 		      		<a class="nav-link" aria-current="page" href="#">Welcome, <b><?php echo ucfirst(htmlspecialchars($_SESSION["username"])); ?></b>.</a>
 		      		<a class="nav-link" aria-current="page" href="allpages.php">All Pages</a>
                 <a class="nav-link" aria-current="page" href="editcomments.php">Comments</a>
-                <!-- <a class="nav-link" aria-current="page" href="design_category.php">Design-Category</a> -->
                 <a class="nav-link" aria-current="page" href="editcategories.php">Categories</a>
                 <a class="nav-link" aria-current="page" href="editdesigns.php">Designs</a>
                 <a class="nav-link" aria-current="page" href="password_reset_admin.php">Reset Password</a>
@@ -78,7 +77,7 @@ catch(Exception $ex) {
 			        <a class="nav-link " aria-current="page" href="admin.php">Admin</a>
 
 		     		<?php } ?>
-			  	</ul>
+			  	</div>
 		    </div>
 		  </div>
 		</nav>
@@ -114,11 +113,10 @@ catch(Exception $ex) {
 			</div>
 			
     </main>
-  </body>
-<script
-  src="https://cdn.jsdelivr.net/npm/bootstrap@5.0.0-beta3/dist/js/bootstrap.bundle.min.js"
-  integrity="sha384-JEW9xMcG8R+pH31jmWH6WWP0WintQrMb4s7ZOdauHnUtxwoG2vI5DkLtS3qm9Ekf"
-  crossorigin="anonymous"
-></script>
-</body>
+	<script
+	  src="https://cdn.jsdelivr.net/npm/bootstrap@5.0.0-beta3/dist/js/bootstrap.bundle.min.js"
+	  integrity="sha384-JEW9xMcG8R+pH31jmWH6WWP0WintQrMb4s7ZOdauHnUtxwoG2vI5DkLtS3qm9Ekf"
+	  crossorigin="anonymous"
+	></script>
+	</body>
 </html>

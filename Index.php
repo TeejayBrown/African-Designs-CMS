@@ -53,7 +53,7 @@ include ('search.php');
 		          <a class="nav-link" aria-current="page" href="explore.php">Explore</a>
 		        </li>
 		      </ul>
-		      <ul class="nav navbar-nav navbar-right">
+		      <div class="nav navbar-nav navbar-right">
 		      	<?php if(isset($_SESSION["adminloggedin"]) && $_SESSION["adminloggedin"] === true) {?>
 		      		<a class="nav-link" aria-current="page" href="#">Welcome, <b><?php echo ucfirst(htmlspecialchars($_SESSION["username"])); ?></b>.</a>
 		      		<a class="nav-link" aria-current="page" href="allpages.php">All Pages</a>
@@ -82,7 +82,7 @@ include ('search.php');
 			        <a class="nav-link " aria-current="page" href="admin.php">Admin</a>
 
 		     		<?php } ?>
-			  	</ul>
+			  	</div>
 		    </div>
 		  </div>
 		</nav>
@@ -111,7 +111,7 @@ include ('search.php');
 			    				<select class="form-control" id="category" name="category">
 		                <option value="" selected="" disabled="">-- Select Category --</option>
 		                <?php
-		                    require('db_connect.php');
+		                    /*--require('db_connect.php');*/
 		                    $sql="select * from categories ";  
 		                    foreach ($db->query($sql) as $row) {
 		                    echo "<option value=$row[categoryId]>$row[name]</option>";
@@ -162,11 +162,4 @@ include ('search.php');
     	<?php include("footer.php") ?>
     </main>
   </body>
-<script
-  src="https://cdn.jsdelivr.net/npm/bootstrap@5.0.0-beta3/dist/js/bootstrap.bundle.min.js"
-  integrity="sha384-JEW9xMcG8R+pH31jmWH6WWP0WintQrMb4s7ZOdauHnUtxwoG2vI5DkLtS3qm9Ekf"
-  crossorigin="anonymous"
-></script>
-
-</body>
 </html>

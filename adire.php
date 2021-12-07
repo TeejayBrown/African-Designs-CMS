@@ -51,7 +51,7 @@ catch(Exception $ex) {
 		          <a class="nav-link" aria-current="page" href="explore.php">Explore</a>
 		        </li>
 		      </ul>
-		      <ul class="nav navbar-nav navbar-right">
+		      <div class="nav navbar-nav navbar-right">
 		      	<?php if(isset($_SESSION["adminloggedin"]) && $_SESSION["adminloggedin"] === true) {?>
 		      		<a class="nav-link" aria-current="page" href="#">Welcome, <b><?php echo ucfirst(htmlspecialchars($_SESSION["username"])); ?></b>.</a>
 		      		<a class="nav-link active" aria-current="page" href="allpages.php">All Pages</a>
@@ -78,7 +78,7 @@ catch(Exception $ex) {
 			        <a class="nav-link " aria-current="page" href="admin.php">Admin</a>
 
 		     		<?php } ?>
-			  	</ul>
+			  	</div>
 		    </div>
 		  </div>
 		</nav>
@@ -111,13 +111,11 @@ catch(Exception $ex) {
 					<?php endforeach ?>
 				</div>	
 			</div>
-			
     </main>
-  </body>
-<script
-  src="https://cdn.jsdelivr.net/npm/bootstrap@5.0.0-beta3/dist/js/bootstrap.bundle.min.js"
-  integrity="sha384-JEW9xMcG8R+pH31jmWH6WWP0WintQrMb4s7ZOdauHnUtxwoG2vI5DkLtS3qm9Ekf"
-  crossorigin="anonymous"
-></script>
-</body>
+		<script
+	  src="https://cdn.jsdelivr.net/npm/bootstrap@5.0.0-beta3/dist/js/bootstrap.bundle.min.js"
+	  integrity="sha384-JEW9xMcG8R+pH31jmWH6WWP0WintQrMb4s7ZOdauHnUtxwoG2vI5DkLtS3qm9Ekf"
+	  crossorigin="anonymous">
+	</script>
+	</body>
 </html>

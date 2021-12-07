@@ -144,7 +144,8 @@ if (isset($_GET['comment_reply'])) { // Retrieve quote to be edited, if id GET p
 				<input type="hidden" name="designId" value="<?php echo $_SESSION["designId"]; ?>">
 				<input type="submit" name="delete_design" value="Delete" onclick="return confirm('Are you sure you wish to delete this design?')">
 			</form>      				
-		</div>		
+		</div>
+		<?php include("footer.php") ?>		
     </main>
   </body>
 <script

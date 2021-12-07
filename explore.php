@@ -38,36 +38,35 @@ include ('image_display.php');
 		          <a class="nav-link" aria-current="page" href="explore.php">Explore</a>
 		        </li>
 		      </ul>
-			      <ul class="nav navbar-nav navbar-right">
-			      	<?php if(isset($_SESSION["adminloggedin"]) && $_SESSION["adminloggedin"] === true) {?>
-			      		<a class="nav-link" aria-current="page" href="#">Welcome, <b><?php echo ucfirst(htmlspecialchars($_SESSION["username"])); ?></b>.</a>
-			      		<a class="nav-link" aria-current="page" href="allpages.php">All Pages</a>
-	                <a class="nav-link" aria-current="page" href="editcomments.php">Comments</a>
-	                <!-- <a class="nav-link" aria-current="page" href="design_category.php">Design-Category</a> -->
-	                <a class="nav-link" aria-current="page" href="editcategories.php">Categories</a>
-	                <a class="nav-link" aria-current="page" href="editdesigns.php">Designs</a>
-	                <a class="nav-link" aria-current="page" href="password_reset_admin.php">Reset Password</a>
-	                <a class="nav-link" aria-current="page" href="logout.php">Sign Out</a>
-			      	<?php } elseif(isset($_SESSION["designerloggedin"]) && $_SESSION["designerloggedin"] === true) {?>
-			      		<a class="nav-link" aria-current="page" href="#">Welcome, <b><?php echo ucfirst(htmlspecialchars($_SESSION["username"])); ?></b>.</a>
-			      		<a class="nav-link" aria-current="page" href="mydesign.php">Designs</a>
-	              <a class="nav-link" aria-current="page" href="design.php">Upload Designs</a>
-	              <a class="nav-link" aria-current="page" href="password_reset_designer.php">Reset Password</a>
-	              <a class="nav-link" aria-current="page" href="logout.php">Sign Out</a>
-	             <?php } elseif(isset($_SESSION["loggedin"]) && $_SESSION["loggedin"] === true) {?>
-	            	<a class="nav-link" aria-current="page" href="#">Welcome, <b><?php echo ucfirst(htmlspecialchars($_SESSION["username"])); ?></b>.</a>
-	              <a class="nav-link" aria-current="page" href="design.php">Submit a design</a>
-	              <a class="nav-link" aria-current="page" href="password_reset.php">Reset Your Password</a>
-	              <a class="nav-link" aria-current="page" href="logout.php">Sign Out</a>
-	            <?php } else {?>
-				        <a class="nav-link " aria-current="page" href="design.php">Submit a design</a>
-				        <a class="nav-link " aria-current="page" href="login.php">Log in</a>
-				        <a class="nav-link " aria-current="page" href="designerlogin.php">Designer</a>
-				        <a class="nav-link " aria-current="page" href="admin.php">Admin</a>
-			     		<?php } ?>
-				  	</ul>
-				  </div>
-		    </div>
+		      <div class="nav navbar-nav navbar-right">
+		      	<?php if(isset($_SESSION["adminloggedin"]) && $_SESSION["adminloggedin"] === true) {?>
+		      		<a class="nav-link" aria-current="page" href="#">Welcome, <b><?php echo ucfirst(htmlspecialchars($_SESSION["username"])); ?></b>.</a>
+		      		<a class="nav-link" aria-current="page" href="allpages.php">All Pages</a>
+                <a class="nav-link" aria-current="page" href="editcomments.php">Comments</a>
+                <!-- <a class="nav-link" aria-current="page" href="design_category.php">Design-Category</a> -->
+                <a class="nav-link" aria-current="page" href="editcategories.php">Categories</a>
+                <a class="nav-link" aria-current="page" href="editdesigns.php">Designs</a>
+                <a class="nav-link" aria-current="page" href="password_reset_admin.php">Reset Password</a>
+                <a class="nav-link" aria-current="page" href="logout.php">Sign Out</a>
+		      	<?php } elseif(isset($_SESSION["designerloggedin"]) && $_SESSION["designerloggedin"] === true) {?>
+		      		<a class="nav-link" aria-current="page" href="#">Welcome, <b><?php echo ucfirst(htmlspecialchars($_SESSION["username"])); ?></b>.</a>
+		      		<a class="nav-link" aria-current="page" href="mydesign.php">Designs</a>
+              <a class="nav-link" aria-current="page" href="design.php">Upload Designs</a>
+              <a class="nav-link" aria-current="page" href="password_reset_designer.php">Reset Password</a>
+              <a class="nav-link" aria-current="page" href="logout.php">Sign Out</a>
+             <?php } elseif(isset($_SESSION["loggedin"]) && $_SESSION["loggedin"] === true) {?>
+            	<a class="nav-link" aria-current="page" href="#">Welcome, <b><?php echo ucfirst(htmlspecialchars($_SESSION["username"])); ?></b>.</a>
+              <a class="nav-link" aria-current="page" href="design.php">Submit a design</a>
+              <a class="nav-link" aria-current="page" href="password_reset.php">Reset Your Password</a>
+              <a class="nav-link" aria-current="page" href="logout.php">Sign Out</a>
+            <?php } else {?>
+			        <a class="nav-link " aria-current="page" href="design.php">Submit a design</a>
+			        <a class="nav-link " aria-current="page" href="login.php">Log in</a>
+			        <a class="nav-link " aria-current="page" href="designerlogin.php">Designer</a>
+			        <a class="nav-link " aria-current="page" href="admin.php">Admin</a>
+		     		<?php } ?>
+			  	</div>
+				</div>
 		  </div>
 		</nav>
     <main class="container">

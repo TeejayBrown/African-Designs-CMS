@@ -57,7 +57,7 @@ if(!isset($_SESSION["adminloggedin"]) || $_SESSION["adminloggedin"] !== true){
                         </li>
                     </ul>
                     <ul class="nav navbar-nav navbar-right">
-                        <a class="nav-link" aria-current="page" href="#">Welcome, <b><?php echo htmlspecialchars($_SESSION["username"]); ?></b>.</a>
+                        <a class="nav-link" aria-current="page" href="#">Welcome, <b><?php echo ucfirst(htmlspecialchars($_SESSION["username"])); ?></b>.</a>
                         <a class="nav-link" aria-current="page" href="allpages.php">All Pages</a>
                         <a class="nav-link" aria-current="page" href="editcomments.php">Comments</a>
                         <!-- <a class="nav-link" aria-current="page" href="design_category.php">Design-Category</a> -->
@@ -101,9 +101,7 @@ if(!isset($_SESSION["adminloggedin"]) || $_SESSION["adminloggedin"] !== true){
               <button type="submit" name = category class="btn btn-secondary">Submit</button>
               <a class="btn btn-link ml-2" href="editcategories.php">Cancel</a>
         </form>
-        <div id="footer">
-            Copyright 2021 - No Rights Reserved
-        </div>
+        <?php include("footer.php") ?>
     </main>
 </body>
 </html>

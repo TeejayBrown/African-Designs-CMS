@@ -103,7 +103,7 @@ if($_SERVER["REQUEST_METHOD"] == "POST"){
                     </li>
                 </ul>
                 <ul class="nav navbar-nav navbar-right">
-                    <a class="nav-link" aria-current="page" href="#">Welcome, <b><?php echo htmlspecialchars($_SESSION["username"]); ?></b>.</a>
+                    <a class="nav-link" aria-current="page" href="#">Welcome, <b><?php echo ucfirst(htmlspecialchars($_SESSION["username"])); ?></b>.</a>
                     <a class="nav-link" aria-current="page" href="allpages.php">All Pages</a>
                     <a class="nav-link" aria-current="page" href="editcomments.php">Comments</a>
                     <!-- <a class="nav-link" aria-current="page" href="design_category.php">Design-Category</a> -->

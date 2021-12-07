@@ -53,14 +53,14 @@ if(!isset($_SESSION["designerloggedin"]) || $_SESSION["designerloggedin"] !== tr
     />
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.4.1/font/bootstrap-icons.css" />
     <link rel="stylesheet" type="text/css" href="styles.css" />
-    <script type="text/javascript" src="ckeditor/ckeditor.js"></script>
+    <script src="ckeditor/ckeditor.js"></script>
     <title>African Design</title>
   </head>
 <body>
     <nav class="navbar navbar-expand-lg navbar-light bg-light">
         <div class="container-fluid">
             <a class="navbar-brand" href="index.php">African Designs</a>
-            <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarText" aria-controls="navbarText" aria-expanded="false" aria-label="Toggle navigation">
+            <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarSupportedContent" aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
             <span class="navbar-toggler-icon"></span>
             </button>
             <div class="collapse navbar-collapse" id="navbarSupportedContent">
@@ -69,16 +69,16 @@ if(!isset($_SESSION["designerloggedin"]) || $_SESSION["designerloggedin"] !== tr
                         <a class="nav-link active" aria-current="page" href="index.php">Home</a>
                     </li>
                     <li class="nav-item">
-                        <a class="nav-link" aria-current="page" href="#">Explore</a>
+                        <a class="nav-link" aria-current="page" href="explore.php">Explore</a>
                     </li>
                 </ul>
-                <ul class="nav navbar-nav navbar-right">
-                    <a class="nav-link" aria-current="page" href="#">Welcome, <b><?php echo htmlspecialchars($_SESSION["username"]); ?></b>.</a>
+                <div class="nav navbar-nav navbar-right">
+                    <a class="nav-link" aria-current="page" href="#">Welcome, <b><?php echo ucfirst(htmlspecialchars($_SESSION["username"])); ?></b>.</a>
                     <a class="nav-link" aria-current="page" href="mydesign.php">Designs</a>
                     <a class="nav-link active" aria-current="page" href="design.php">Upload Design</a>
                     <a class="nav-link" aria-current="page" href="password_reset_designer.php">Reset Password</a>
                     <a class="nav-link" aria-current="page" href="logout.php">Sign Out</a>
-                </ul>
+                </div>
             </div>
       </div>
     </nav>
@@ -103,15 +103,15 @@ if(!isset($_SESSION["designerloggedin"]) || $_SESSION["designerloggedin"] !== tr
         <form action="process_post.php" method="post" enctype='multipart/form-data'>
             <div class="mb-3">
                 <label for="name" class="form-label fw-bold">Design Name</label>
-                <input type="name" class="form-control" name= "designname" id="name" aria-describedby="nameHelp">
+                <input type="text" class="form-control" name= "designname" id="name">
             </div>
             <div class="mb-3">
-                <label for="text" class="form-label fw-bold">Description</label>
-                <textarea class="ckeditor" CKEDITOR.config.autoParagraph = false; id="description" name="description" rows="3"></textarea>
+                <label for="description" class="form-label fw-bold">Description</label>
+                <textarea class="ckeditor" id="description" name="description" rows="3"></textarea>
             </div>
            <div class="mb-3">
                 <label for="image" class="form-label fw-bold">Image</label>
-                <input type="file" name= image class="form-control" id="image"></input>
+                <input type="file" name= image class="form-control" id="image">
             </div> 
             <div class="mb-3">
                 <label for="category" class="form-label fw-bold">Category Id</label>
@@ -135,9 +135,7 @@ if(!isset($_SESSION["designerloggedin"]) || $_SESSION["designerloggedin"] !== tr
           <?php echo $resMessage['message']?>
         </div>
         <?php }?>
-        <div id="footer">
-            Copyright 2021 - No Rights Reserved
-        </div>
+        <?php include("footer.php") ?>
     </main>
 </body>
 </html>
