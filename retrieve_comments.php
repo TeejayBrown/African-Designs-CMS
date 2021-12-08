@@ -1,4 +1,10 @@
 <?Php
+session_start();
+
+if(!isset($_SESSION["adminloggedin"]) || $_SESSION["adminloggedin"] !== true){
+    header("location: admin.php");
+    exit;
+}
 @$designId=$_GET['designId'];
 //$designId=1;
 if(!is_numeric($designId)){

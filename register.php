@@ -133,46 +133,65 @@ if($_SERVER["REQUEST_METHOD"] == "POST"){
                       <a class="nav-link" href="#">Link</a>
                     </li>
                 </ul>
-                <ul class="nav navbar-nav navbar-right">
-                    <a class="nav-link active" aria-current="page" href="login.php">Log in</a>
-                    <button class="btn btn-default" type="submit">Submit a design</button>
-                </ul>
+                <div class="nav navbar-nav navbar-right">
+                    <a class="nav-link " aria-current="page" href="design.php">Submit a design</a>
+                    <a class="nav-link " aria-current="page" href="login.php">Log in</a>
+                    <a class="nav-link " aria-current="page" href="designerlogin.php">Designer</a>
+                    <a class="nav-link " aria-current="page" href="admin.php">Admin</a>
+                </div>
             </div>
         </div>
     </nav>
-    <div class="wrapper">
-        <h2>Sign Up</h2>
-        <p>Please fill this form to create an account.</p>
-        <form action="<?php echo htmlspecialchars($_SERVER["PHP_SELF"]); ?>" method="post">
-            <div class="form-group">
-                <label>Email</label>
-                <input type="email" class="form-control" name="email" required="required">
-            </div>
-            <div class="form-group">
-                <label>Username</label>
-                <input type="text" name="username" class="form-control <?php echo (!empty($username_err)) ? 'is-invalid' : ''; ?>" value="<?php echo $username; ?>">
-                <span class="invalid-feedback"><?php echo $username_err; ?></span>
-            </div>    
-            <div class="form-group">
-                <label>Password</label>
-                <input type="password" name="password" class="form-control <?php echo (!empty($password_err)) ? 'is-invalid' : ''; ?>" value="<?php echo $password; ?>">
-                <span class="invalid-feedback"><?php echo $password_err; ?></span>
-            </div>
-            <div class="form-group">
-                <label>Confirm Password</label>
-                <input type="password" name="confirm_password" class="form-control <?php echo (!empty($confirm_password_err)) ? 'is-invalid' : ''; ?>" value="<?php echo $confirm_password; ?>">
-                <span class="invalid-feedback"><?php echo $confirm_password_err; ?></span>
-            </div>
-            <div class="form-group">
-                <label class="checkbox-inline"><input type="checkbox" required="required"> I accept the <a href="#">Terms of Use</a> &amp; <a href="#">Privacy Policy</a></label>
-            </div>
-            <div class="form-group">
-                <input type="submit" class="btn btn-primary" value="Submit">
-                <input type="reset" class="btn btn-secondary ml-2" value="Reset">
-            </div>
-            <p>Already have an account? <a href="login.php">Login here</a>.</p>
-            <p>Are you an African Designer? <a href="designer.php">Signup here</a>.</p>
-        </form>
-    </div>    
+    <main class="container">
+        <ul class="nav nav-fill w-100">
+            <li class="nav-item">
+              <a class="nav-link" aria-current="page" href="adire.php">Adire</a>
+            </li>
+            <li class="nav-item">
+              <a class="nav-link" aria-current="page" href="ankara.php">Ankara</a>
+            </li>
+            <li class="nav-item">
+              <a class="nav-link" aria-current="page" href="asooke.php">Aso Oke</a>
+            </li>
+            <li class="nav-item">
+              <a class="nav-link" aria-current="page" href="lace.php">Lace</a>
+            </li>
+        </ul>
+        <div class="wrapper">
+            <h2>Sign Up</h2>
+            <p>Please fill this form to create an account.</p>
+            <form action="<?php echo htmlspecialchars($_SERVER["PHP_SELF"]); ?>" method="post">
+                <div class="form-group">
+                    <label>Email</label>
+                    <input type="email" class="form-control" name="email" required="required">
+                </div>
+                <div class="form-group">
+                    <label>Username</label>
+                    <input type="text" name="username" class="form-control <?php echo (!empty($username_err)) ? 'is-invalid' : ''; ?>" value="<?php echo $username; ?>">
+                    <span class="invalid-feedback"><?php echo $username_err; ?></span>
+                </div>    
+                <div class="form-group">
+                    <label>Password</label>
+                    <input type="password" name="password" class="form-control <?php echo (!empty($password_err)) ? 'is-invalid' : ''; ?>" value="<?php echo $password; ?>">
+                    <span class="invalid-feedback"><?php echo $password_err; ?></span>
+                </div>
+                <div class="form-group">
+                    <label>Confirm Password</label>
+                    <input type="password" name="confirm_password" class="form-control <?php echo (!empty($confirm_password_err)) ? 'is-invalid' : ''; ?>" value="<?php echo $confirm_password; ?>">
+                    <span class="invalid-feedback"><?php echo $confirm_password_err; ?></span>
+                </div>
+                <div class="form-group">
+                    <label class="checkbox-inline"><input type="checkbox" required="required"> I accept the <a href="#">Terms of Use</a> &amp; <a href="#">Privacy Policy</a></label>
+                </div>
+                <div class="form-group">
+                    <input type="submit" class="btn btn-primary" value="Submit">
+                    <input type="reset" class="btn btn-secondary ml-2" value="Reset">
+                </div>
+                <p>Already have an account? <a href="login.php">Login here</a>.</p>
+                <p>Are you an African Designer? <a href="designer.php">Signup here</a>.</p>
+            </form>
+        </div>
+        <?php include("footer.php") ?>
+    </main>   
 </body>
 </html>

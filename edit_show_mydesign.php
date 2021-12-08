@@ -1,9 +1,4 @@
 <?php
-	/* A Simple Blogging Application
-    Title : Edit Page - For Updating and Deleting Post
-    Date: September 27th 2021
-    Group 8: Taiwo Omoleye and Jan Cyruss Naniong
-    */
     require('db_connect.php');
     include ("fileupload.php");
     
@@ -28,13 +23,11 @@
     session_start();
     //require('authenticate.php');
 
-
-
-    if(!isset($_SESSION["adminloggedin"]) || $_SESSION["adminloggedin"] !== true){
-    header("location: admin.php");
+    if(!isset($_SESSION["designerloggedin"]) || $_SESSION["designerloggedin"] !== true){
+    header("location: designer.php");
     exit;
-	} 
-
+    }
+    
     if (isset($_GET['id']) && isset($_GET['design_name'])) { // Retrieve quote to be edited, if id GET parameter is in URL.
         // Sanitize the id. 
         $designId = filter_input(INPUT_GET, 'id', FILTER_SANITIZE_NUMBER_INT);
@@ -51,7 +44,7 @@
     } 
 
     if ($designs===false) {
-        header("Location: editdesigns.php");
+        header("Location: mydesign.php");
         exit;
     }
 
@@ -98,16 +91,13 @@
                     <a class="nav-link" aria-current="page" href="explore.php">Explore</a>
                 </li>
             </ul>
-            <ul class="nav navbar-nav navbar-right">
+            <div class="nav navbar-nav navbar-right">
                 <a class="nav-link" aria-current="page" href="#">Welcome, <b><?php echo ucfirst(htmlspecialchars($_SESSION["username"])); ?></b>.</a>
-                <a class="nav-link" aria-current="page" href="allpages.php">All Pages</a>
-                <a class="nav-link" aria-current="page" href="editcomments.php">Comments</a>
-                <!-- <a class="nav-link" aria-current="page" href="design_category.php">Design-Category</a> -->
-                <a class="nav-link" aria-current="page" href="editcategories.php">Categories</a>
-                <a class="nav-link active" aria-current="page" href="editdesigns.php">Designs</a>
-                <a class="nav-link" aria-current="page" href="password_reset_admin.php">Reset Password</a>
-                <a class="nav-link" aria-current="page" href="logout.php">Sign Out</a>
-            </ul>
+                <a class="nav-link active" aria-current="page" href="mydesign.php">Designs</a>
+              <a class="nav-link" aria-current="page" href="design.php">Upload Designs</a>
+              <a class="nav-link" aria-current="page" href="password_reset_designer.php">Reset Password</a>
+              <a class="nav-link" aria-current="page" href="logout.php">Sign Out</a>
+            </div>
         </div>
       </div>
     </nav>
@@ -166,7 +156,6 @@
 					<p>
 						<input type="hidden" name="designId" value="<?= $designs['designId'] ?>">
 						<input type="submit" name="updatedesign" value="Update">
-						<input type="submit" name="deletedesign" value="Delete" onclick="return confirm('Are you sure you wish to delete this post?')">
 					</p>
 				</fieldset>
 			</form>	
