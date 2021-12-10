@@ -9,34 +9,7 @@
     include '\xampp\htdocs\wd2\Project\php-image-resize-master\lib\ImageResizeException.php';
     use \Gumlet\ImageResize;
 
-    function getExtension($str){
-        $i = strrpos($str,".");
-        if (!$i) { return ""; }
-        $I = strlen($str) - $i;
-        $ext = substr($str,$i+1,$I);
-        return $ext;
-    }
-
-    function getFilename($str){
-        $i = strrpos($str,".");
-        if (!$i) { return ""; }
-        $I = strlen($str) - $i;
-        $ext = substr($str,0,-$I);
-        return $ext;
-    }
-
-    function version_name($str, $name){
-        if ($name == 'medium'){
-            $mid1 = '_'. $name.'.';
-            $result =  getFilename($str).$mid1.getExtension($str);
-        } elseif($name == 'thumbnail'){
-            $mid1 = '_'. $name.'.';
-            $result =  getFilename($str).$mid1.getExtension($str);
-        } else{
-            $result = "";
-        }
-        return $result;
-    }
+    //include ('image_display.php');
 
     function file_upload_path($original_filename, $upload_subfolder_name = 'uploads') {
        $current_folder = dirname(__FILE__);

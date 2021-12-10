@@ -1,9 +1,4 @@
 <?php
-	/* A Simple Blogging Application
-    Title : Edit Page - For Updating and Deleting Post
-    Date: September 27th 2021
-    Group 8: Taiwo Omoleye and Jan Cyruss Naniong
-    */
     require('db_connect.php');
     include ("fileupload.php");
     
@@ -79,7 +74,7 @@
     />
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.4.1/font/bootstrap-icons.css" />
     <link rel="stylesheet" type="text/css" href="styles.css" />
-    <script type="text/javascript" src="ckeditor/ckeditor.js"></script>
+    <script src="ckeditor/ckeditor.js"></script>
     <title>African Design</title>
   </head>
 <body>
@@ -98,16 +93,15 @@
                     <a class="nav-link" aria-current="page" href="explore.php">Explore</a>
                 </li>
             </ul>
-            <ul class="nav navbar-nav navbar-right">
+            <div class="nav navbar-nav navbar-right">
                 <a class="nav-link" aria-current="page" href="#">Welcome, <b><?php echo ucfirst(htmlspecialchars($_SESSION["username"])); ?></b>.</a>
                 <a class="nav-link" aria-current="page" href="allpages.php">All Pages</a>
                 <a class="nav-link" aria-current="page" href="editcomments.php">Comments</a>
-                <!-- <a class="nav-link" aria-current="page" href="design_category.php">Design-Category</a> -->
                 <a class="nav-link" aria-current="page" href="editcategories.php">Categories</a>
                 <a class="nav-link active" aria-current="page" href="editdesigns.php">Designs</a>
                 <a class="nav-link" aria-current="page" href="password_reset_admin.php">Reset Password</a>
                 <a class="nav-link" aria-current="page" href="logout.php">Sign Out</a>
-            </ul>
+            </div>
         </div>
       </div>
     </nav>
@@ -134,24 +128,24 @@
 					<legend>Editing <?= $designs['name'] ?></legend>
 					<div class="mb-3">
 		                <label for="title" class="form-label fw-bold">Design Name</label>
-		                <input type="name" class="form-control" id="title" name="title" value="<?= $designs['name'] ?>">
+		                <input type="text" class="form-control" id="title" name="title" value="<?= $designs['name'] ?>">
 		            </div>
 		            
 		            <div class="mb-3">
-		                <label for="text" class="form-label fw-bold">Description</label>
+		                <label for="description" class="form-label fw-bold">Description</label>
 		                <textarea class="ckeditor" id="description" name="description" rows="3"><?= $designs['description'] ?></textarea>
 		            </div>
                     <div class="mb-3">
-                        <label for="image" class="form-label fw-bold">Image</label>
+                        <label class="form-label fw-bold">Image</label>
 
                         <div class="mb-3">
-                            <img src="<?= getImageFolder($designs['image']) ?>" alt= <?= $designs['name'] ?>>
+                            <img src="<?= getImageFolder($designs['image']) ?>" alt= <?= $designs['slug'] ?>>
                         </div>
                     </div> 
                     <div class="mb-3">
                         <div class="mb-3">
                             <label for="category" class="form-label fw-bold">Selected Category Id</label>
-                            <input type="name" class="form-control" value="<?= $designs['categoryId'] ?>" readonly>
+                            <input type="text" class="form-control" value="<?= $designs['categoryId'] ?>" readonly>
                         </div>
                         <div class="mb-3">
                             <label for="category" class="form-label fw-bold">Category Id: Select to confirm</label>

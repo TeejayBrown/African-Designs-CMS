@@ -90,7 +90,7 @@ if (isset($_GET['comment_reply'])) { // Retrieve quote to be edited, if id GET p
 		      </ul>
 		      <ul class="nav navbar-nav navbar-right">
 		      	<?php if(isset($_SESSION["adminloggedin"]) && $_SESSION["adminloggedin"] === true) {?>
-		      		<a class="nav-link" aria-current="page" href="#">Welcome, <b><?php echo htmlspecialchars($_SESSION["username"]); ?></b>.</a>
+		      		<a class="nav-link" aria-current="page" href="#">Welcome, <b><?php echo ucfirst(htmlspecialchars($_SESSION["username"])); ?></b>.</a>
 		      		<a class="nav-link" aria-current="page" href="allpages.php">All Pages</a>
                 <a class="nav-link" aria-current="page" href="editcomments.php">Comments</a>
                 <!-- <a class="nav-link" aria-current="page" href="design_category.php">Design-Category</a> -->
@@ -99,13 +99,13 @@ if (isset($_GET['comment_reply'])) { // Retrieve quote to be edited, if id GET p
                 <a class="nav-link" aria-current="page" href="password_reset_admin.php">Reset Password</a>
                 <a class="nav-link" aria-current="page" href="logout.php">Sign Out</a>
 		      	<?php } elseif(isset($_SESSION["designerloggedin"]) && $_SESSION["designerloggedin"] === true) {?>
-		      		<a class="nav-link" aria-current="page" href="#">Welcome, <b><?php echo htmlspecialchars($_SESSION["username"]); ?></b>.</a>
+		      		<a class="nav-link" aria-current="page" href="#">Welcome, <b><?php echo ucfirst(htmlspecialchars($_SESSION["username"])); ?></b>.</a>
 		      		<a class="nav-link" aria-current="page" href="mydesign.php">Designs</a>
               <a class="nav-link active" aria-current="page" href="design.php">Upload Design</a>
               <a class="nav-link" aria-current="page" href="password_reset_designer.php">Reset Password</a>
               <a class="nav-link" aria-current="page" href="logout.php">Sign Out</a>
              <?php } elseif(isset($_SESSION["loggedin"]) && $_SESSION["loggedin"] === true) {?>
-            	<a class="nav-link" aria-current="page" href="#">Welcome, <b><?php echo htmlspecialchars($_SESSION["username"]); ?></b>.</a>
+            	<a class="nav-link" aria-current="page" href="#">Welcome, <b><?php echo ucfirst(htmlspecialchars($_SESSION["username"])); ?></b>.</a>
               <a class="nav-link" aria-current="page" href="design.php">Submit a design</a>
               <a class="nav-link" aria-current="page" href="password_reset.php">Reset Your Password</a>
               <a class="nav-link" aria-current="page" href="logout.php">Sign Out</a>
@@ -139,11 +139,16 @@ if (isset($_GET['comment_reply'])) { // Retrieve quote to be edited, if id GET p
 		<div class="container">
 			<form class="clearfix" action="process_post.php" method="post" id="comment_form" enctype="multipart/form-data">		
 	            <div class="mb-3">
+	            	<div class="mb-3"><h5> <?= htmlspecialchars_decode($designs['description']) ?></h5></div>
 	                <img src="<?= getImageFolder($designs['image']) ?>" alt= <?= $designs['name'] ?>>
 	            </div>
 				<input type="hidden" name="designId" value="<?php echo $_SESSION["designId"]; ?>">
 				<input type="submit" name="delete_design" value="Delete" onclick="return confirm('Are you sure you wish to delete this design?')">
-				<a href="edit_show_mydesign.php?id=<?php echo $designs['designId']; ?>&design_name=<?php echo $designs['slug'];?>" class="btn btn-primary">Edit</a>
+				<?php if(isset($_SESSION["adminloggedin"]) && $_SESSION["adminloggedin"] === true) {?>
+					<a href="edit_show_design.php?id=<?php echo $designs['designId']; ?>&design_name=<?php echo $designs['slug'];?>" class="btn btn-primary">Edit</a>
+				<?php } elseif(isset($_SESSION["designerloggedin"]) && $_SESSION["designerloggedin"] === true) {?>
+					<a href="edit_show_mydesign.php?id=<?php echo $designs['designId']; ?>&design_name=<?php echo $designs['slug'];?>" class="btn btn-primary">Edit</a>
+				<?php } ?>
 			</form>      				
 		</div>
 		<?php include("footer.php") ?>		

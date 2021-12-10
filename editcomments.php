@@ -3,47 +3,13 @@
 
 require('db_connect.php');
 
-/*$qry = "SELECT designId, name FROM designs";
-try{
-    $stmt = $db->prepare($qry);
-     // Execution on the DB server is delayed until we execute().
-     $stmt->execute(); 
-     $outputs = $stmt->fetchAll();
-}
-catch(Exception $ex) {
- echo ($ex -> getMessage());
-}
-
-$query = "SELECT * FROM comments WHERE designId";
-try{
-    $statement = $db->prepare($query);
-     // Execution on the DB server is delayed until we execute().
-     $statement->execute(); 
-     $results = $statement->fetchAll();
-} 
-catch(Exception $ex) {
- echo ($ex -> getMessage());
-}*/
-
 session_start();
-//require('authenticate.php');
 
 // Check if the user is logged in, if not then redirect him to login page
 if(!isset($_SESSION["adminloggedin"]) || $_SESSION["adminloggedin"] !== true){
     header("location: admin.php");
     exit;
 }
-
-
-
-/*// SQL is written as a String.
- $query = "SELECT * FROM comments ORDER BY commentId";
-
- // A PDO::Statement is prepared from the query.
- $statement = $db->prepare($query);
-
- // Execution on the DB server is delayed until we execute().
- $statement->execute(); */
 
 function formatdate($date) {
     return date('F j, Y, g:i a', strtotime($date));
@@ -82,16 +48,15 @@ function formatdate($date) {
                         <a class="nav-link" aria-current="page" href="explore.php">Explore</a>
                     </li>
                 </ul>
-                <ul class="nav navbar-nav navbar-right">
+                <div class="nav navbar-nav navbar-right">
                     <a class="nav-link" aria-current="page" href="#">Welcome, <b><?php echo ucfirst(htmlspecialchars($_SESSION["username"])); ?></b>.</a>
                     <a class="nav-link" aria-current="page" href="allpages.php">All Pages</a>
                     <a class="nav-link active" aria-current="page" href="editcomments.php">Comments</a>
-                    <!-- <a class="nav-link" aria-current="page" href="design_category.php">Design-Category</a> -->
                     <a class="nav-link" aria-current="page" href="editcategories.php">Categories</a>
                     <a class="nav-link" aria-current="page" href="editdesigns.php">Designs</a>
                     <a class="nav-link" aria-current="page" href="password_reset_admin.php">Reset Password</a>
                     <a class="nav-link" aria-current="page" href="logout.php">Sign Out</a>
-                </ul>
+                </div>
             </div>
       </div>
     </nav>
@@ -118,10 +83,7 @@ function formatdate($date) {
                 <select class="form-control" id="design" name="design">
                     <option value='' selected="" disabled="">-- Select Design --</option>
                     <?php
-                        require('db_connect.php');
-                        //require "config.php";// connection to database 
                         $sql="select * from designs "; // Query to collect data 
-
                         foreach ($db->query($sql) as $row) {
                         echo "<option value=$row[designId]>$row[designId]</option>";
                         }
@@ -129,10 +91,7 @@ function formatdate($date) {
                 </select>
             </div>
             <hr>
-            <div class="mb-3" id="blog">
-                <h2 id= "name"></h2>
-                <p><small id= "date"><a></a></small></p>
-                <p class="mb-3" id= "blog"></p>      
+            <div class="mb-3" id="blog"> 
             </div>
         </div>
 

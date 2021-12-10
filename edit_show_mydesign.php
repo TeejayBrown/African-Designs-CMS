@@ -24,7 +24,7 @@
     //require('authenticate.php');
 
     if(!isset($_SESSION["designerloggedin"]) || $_SESSION["designerloggedin"] !== true){
-    header("location: designer.php");
+    header("location: designerlogin.php");
     exit;
     }
     
@@ -155,7 +155,7 @@
                     </div>
 					<p>
 						<input type="hidden" name="designId" value="<?= $designs['designId'] ?>">
-						<input type="submit" name="updatedesign" value="Update">
+						<input type="submit" name="update_design" value="Update">
 					</p>
 				</fieldset>
 			</form>	

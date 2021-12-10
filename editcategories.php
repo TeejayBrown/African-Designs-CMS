@@ -53,16 +53,15 @@ if(!isset($_SESSION["adminloggedin"]) || $_SESSION["adminloggedin"] !== true){
                         <a class="nav-link" aria-current="page" href="explore.php">Explore</a>
                     </li>
                 </ul>
-                <ul class="nav navbar-nav navbar-right">
+                <div class="nav navbar-nav navbar-right">
                     <a class="nav-link" aria-current="page" href="#">Welcome, <b><?php echo ucfirst(htmlspecialchars($_SESSION["username"])); ?></b>.</a>
                     <a class="nav-link" aria-current="page" href="allpages.php">All Pages</a>
                     <a class="nav-link" aria-current="page" href="editcomments.php">Comments</a>
-                    <!-- <a class="nav-link" aria-current="page" href="design_category.php">Design-Category</a> -->
                     <a class="nav-link active" aria-current="page" href="editcategories.php">Categories</a>
                     <a class="nav-link" aria-current="page" href="editdesigns.php">Designs</a>
                     <a class="nav-link" aria-current="page" href="password_reset_admin.php">Reset Password</a>
                     <a class="nav-link" aria-current="page" href="logout.php">Sign Out</a>
-                </ul>
+                </div>
             </div>
       </div>
     </nav>
@@ -88,10 +87,7 @@ if(!isset($_SESSION["adminloggedin"]) || $_SESSION["adminloggedin"] !== true){
             <select class="form-control" id="category" name="category">
                 <option value='' selected="" disabled="">-- Select Category --</option>
                 <?php
-                    require('db_connect.php');
-                    //require "config.php";// connection to database 
                     $sql="select * from categories "; // Query to collect data 
-
                     foreach ($db->query($sql) as $row) {
                     echo "<option value=$row[categoryId]>$row[name]</option>";
                     }
@@ -99,8 +95,6 @@ if(!isset($_SESSION["adminloggedin"]) || $_SESSION["adminloggedin"] !== true){
             </select>
         </div>
         <div class="mb-3" id="details">
-            <h2 id= "title"></h2>
-            <p id="description" name="description"></p>
         </div>
 
         <hr>

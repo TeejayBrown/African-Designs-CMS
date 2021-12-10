@@ -227,7 +227,7 @@
 
     if (isset($_POST['updatedesign']) && strlen($_POST['title']) >=1 && strlen($_POST['description']) >=1 && isset($_POST['designId'])) {
         // Sanitize user input to escape HTML entities and filter out dangerous characters.
-        $description = strip_tags($_POST['description']);
+        $description = htmlspecialchars_decode($_POST['description']);
         $description = filter_var($description, FILTER_SANITIZE_FULL_SPECIAL_CHARS);
         $name = filter_input(INPUT_POST, 'title', FILTER_SANITIZE_FULL_SPECIAL_CHARS);
         $slug = strtolower(str_replace(" ", "-", $name));
@@ -255,6 +255,38 @@
         $error_message = "An error occured while processing your post."; 
         $error_detail = "Both the name and description must at least one character.";
     }
+
+    if (isset($_POST['update_design']) && strlen($_POST['title']) >=1 && strlen($_POST['description']) >=1 && isset($_POST['designId']) && isset($_POST['categoryId'])) {
+        // Sanitize user input to escape HTML entities and filter out dangerous characters.
+        $description = htmlspecialchars_decode($_POST['description']);
+        $description = filter_var($description, FILTER_SANITIZE_FULL_SPECIAL_CHARS);
+        $name = filter_input(INPUT_POST, 'title', FILTER_SANITIZE_FULL_SPECIAL_CHARS);
+        $slug = strtolower(str_replace(" ", "-", $name));
+        //$description = filter_input(INPUT_POST, 'description', FILTER_SANITIZE_FULL_SPECIAL_CHARS);
+        $designId  = filter_input(INPUT_POST, 'designId', FILTER_SANITIZE_NUMBER_INT);
+        $categoryId = filter_input(INPUT_POST, 'categoryId', FILTER_SANITIZE_NUMBER_INT);
+        
+        // Build the parameterized SQL query and bind to the above sanitized values.
+        $query     = "UPDATE designs SET name= :name, slug= :slug, description = :description, categoryId = :categoryId WHERE designId = :designId";
+        $statement = $db->prepare($query);
+        $statement->bindValue(':name', $name); 
+        $statement->bindValue(':slug', $slug);       
+        $statement->bindValue(':description', $description);
+        $statement->bindValue(':categoryId', $categoryId);
+        $statement->bindValue(':designId', $designId, PDO::PARAM_INT);
+        
+        
+        // Execute the INSERT.
+        $statement->execute();
+        
+        // Redirect after update.
+        header("Location: mydesign.php?id=$designId&design_name=$slug");
+        exit;
+    } else {
+        $error_message = "An error occured while updating your post."; 
+        $error_detail = "Both the title and description must at least one character.";
+    }
+
 
 
     if (isset($_POST["deletedesign"]) && isset($_POST['designId'])) {
@@ -414,6 +446,37 @@
     } else {
         $error_message = "An error occured while processing your deletion."; 
         $error_detail = "Delete comment associated with the design.";
+    }
+
+    if (isset($_POST['update_design']) && isset($_POST['designId'])) {
+        // Sanitize user input to escape HTML entities and filter out dangerous characters.
+        $description = strip_tags($_POST['description']);
+        $description = filter_var($description, FILTER_SANITIZE_FULL_SPECIAL_CHARS);
+        $name = filter_input(INPUT_POST, 'title', FILTER_SANITIZE_FULL_SPECIAL_CHARS);
+        $slug = strtolower(str_replace(" ", "-", $name));
+        //$description = filter_input(INPUT_POST, 'description', FILTER_SANITIZE_FULL_SPECIAL_CHARS);
+        $designId  = filter_input(INPUT_POST, 'designId', FILTER_SANITIZE_NUMBER_INT);
+        $categoryId = filter_input(INPUT_POST, 'categoryId', FILTER_SANITIZE_NUMBER_INT);
+        
+        // Build the parameterized SQL query and bind to the above sanitized values.
+        $query     = "UPDATE designs SET name= :name, slug= :slug, description = :description, categoryId = :categoryId WHERE designId = :designId";
+        $statement = $db->prepare($query);
+        $statement->bindValue(':name', $name); 
+        $statement->bindValue(':slug', $slug);       
+        $statement->bindValue(':description', $description);
+        $statement->bindValue(':categoryId', $categoryId);
+        $statement->bindValue(':designId', $designId, PDO::PARAM_INT);
+        
+        
+        // Execute the INSERT.
+        $statement->execute();
+        
+        // Redirect after update.
+        header("Location: single_design.php?id=$designId&design_name=$slug");
+        exit;
+    } else {
+        $error_message = "An error occured while processing your post."; 
+        $error_detail = "Both the name and description must at least one character.";
     }
        
 ?>

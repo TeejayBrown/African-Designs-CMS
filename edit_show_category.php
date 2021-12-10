@@ -58,7 +58,7 @@
     />
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.4.1/font/bootstrap-icons.css" />
     <link rel="stylesheet" type="text/css" href="styles.css" />
-    <script type="text/javascript" src="ckeditor/ckeditor.js"></script>
+    <script src="ckeditor/ckeditor.js"></script>
     <title>African Design</title>
   </head>
   <nav class="navbar navbar-expand-lg navbar-light bg-light">
@@ -76,7 +76,7 @@
                         <a class="nav-link" aria-current="page" href="explore.php">Explore</a>
                     </li>
                 </ul>
-                <ul class="nav navbar-nav navbar-right">
+                <div class="nav navbar-nav navbar-right">
                     <a class="nav-link" aria-current="page" href="#">Welcome, <b><?php echo ucfirst(htmlspecialchars($_SESSION["username"])); ?></b>.</a>
                     <a class="nav-link" aria-current="page" href="allpages.php">All Pages</a>
                     <a class="nav-link" aria-current="page" href="editcomments.php">Comments</a>
@@ -85,7 +85,7 @@
                     <a class="nav-link" aria-current="page" href="editdesigns.php">Designs</a>
                     <a class="nav-link" aria-current="page" href="password_reset_admin.php">Reset Password</a>
                     <a class="nav-link" aria-current="page" href="logout.php">Sign Out</a>
-                </ul>
+                </div>
             </div>
       </div>
     </nav>
@@ -112,11 +112,11 @@
 					<legend>Editing <?= $categories['name'] ?></legend>
 					<div class="mb-3">
 		                <label for="title" class="form-label fw-bold">Category Name</label>
-		                <input type="name" class="form-control" id="title" name="title" value="<?= $categories['name'] ?>">
+		                <input type="text" class="form-control" id="title" name="title" value="<?= $categories['name'] ?>">
 		            </div>
 		            
 		            <div class="mb-3">
-		                <label for="text" class="form-label fw-bold">Description</label>
+		                <label for="description" class="form-label fw-bold">Description</label>
 		                <textarea class="ckeditor" id="description" name="description" rows="3"><?= $categories['description'] ?></textarea>
 		            </div>
 					<p>

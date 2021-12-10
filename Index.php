@@ -65,7 +65,6 @@ include ('search.php');
                 <a class="nav-link" aria-current="page" href="logout.php">Sign Out</a>
 		      	<?php } elseif(isset($_SESSION["designerloggedin"]) && $_SESSION["designerloggedin"] === true) {?>
 		      		<a class="nav-link" aria-current="page" href="#">Welcome, <b><?php echo ucfirst(htmlspecialchars($_SESSION["username"])); ?></b>.</a>
-		      		<a class="nav-link" aria-current="page" href="addpage.php">New Page</a>
 		      		<a class="nav-link" aria-current="page" href="mydesign.php">Designs</a>
               <a class="nav-link" aria-current="page" href="design.php">Upload Designs</a>
               <a class="nav-link" aria-current="page" href="password_reset_designer.php">Reset Password</a>
@@ -111,7 +110,6 @@ include ('search.php');
 			    				<select class="form-control" id="category" name="category">
 		                <option value="" selected="" disabled="">-- Select Category --</option>
 		                <?php
-		                    /*--require('db_connect.php');*/
 		                    $sql="select * from categories ";  
 		                    foreach ($db->query($sql) as $row) {
 		                    echo "<option value=$row[categoryId]>$row[name]</option>";
@@ -120,7 +118,6 @@ include ('search.php');
 			            </select>
 			            <button class="btn btn-primary" type="submit" name= "search">Search</button>
 					     </form>
-					     <p>Trending:</p>
 	            </div>
 	        </div>
 	    </div>

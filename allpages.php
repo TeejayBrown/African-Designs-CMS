@@ -88,19 +88,17 @@ if($_SERVER["REQUEST_METHOD"] == "POST"){
                         <a class="nav-link" aria-current="page" href="explore.php">Explore</a>
                     </li>
                 </ul>
-                <ul class="nav navbar-nav navbar-right">
+                <div class="nav navbar-nav navbar-right">
                     <a class="nav-link" aria-current="page" href="#">Welcome, <b><?php echo ucfirst(htmlspecialchars($_SESSION["username"])); ?></b>.</a>
                     <a class="nav-link active" aria-current="page" href="allpages.php">All Pages</a>
                     <a class="nav-link active" aria-current="page" href="editcomments.php">Comments</a>
-                    <!-- <a class="nav-link" aria-current="page" href="design_category.php">Design-Category</a> -->
                     <a class="nav-link" aria-current="page" href="editcategories.php">Categories</a>
                     <a class="nav-link" aria-current="page" href="editdesigns.php">Designs</a>
                     <a class="nav-link" aria-current="page" href="password_reset_admin.php">Reset Password</a>
                     <a class="nav-link" aria-current="page" href="logout.php">Sign Out</a>
-                </ul>
+                </div>
             </div>
         </div>
-      </div>
     </nav>
     <main class="container">
         <ul class="nav nav-fill w-100">
